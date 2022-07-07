@@ -1,0 +1,21 @@
+Assume you have 1000 USDC and 1000 USD. Bot places two sell orders:
+- sell 500 USDC @1.0002
+- sell 500 USDC @1.0008
+
+and three buy orders
+- buy 200 USDC @ .998
+- buy 300 USDC @ .996
+- buy 500 USDC @ .992
+
+Bot distributes buy and sell orders depending on the parameters in config file: 
+percentage of balance and price level.
+
+config.py - set up tradable pairs, buy/sell levels and path to API keys and logs
+
+main.py - gets data from Kraken API and pass it to trade function
+
+include2.py - analyses API data and submits trading requests
+
+include.py - this is a collection of helper functions
+
+other/k0.key - put your API key here
