@@ -6,6 +6,13 @@ from config import sell_levels, buy_levels
 
 def trade(base, quote, pair0, bal, orders, k, ticker):
     # construct pair from base and quote. USDCUSD is an exception
+    # print('base', base)
+    # print('quote', quote)
+    # print('pair0', pair0)
+    # print('bal', bal)
+    # print('orders', orders)
+    # print('k', k)
+    # print('ticker', ticker)
     pair = base + quote
     if pair == 'USDCZUSD':
         pair = 'USDCUSD'
@@ -18,20 +25,25 @@ def trade(base, quote, pair0, bal, orders, k, ticker):
     # of rounding issues and insufficient funds error
     bal_b = float(bal.get(base)) - 0.1
     bal_q = float(bal.get(quote)) - 0.1
-    print(base, bal_b)
-    print(quote, bal_q)
+    # print('bal_b', base, bal_b)
+    # print('bal_q', quote, bal_q)
     logger.info(base + ' ' + str(bal_b) + ' ' + quote + ' ' + str(bal_q))
     # price_cell is a price precision variable
     price_cell = inc.get_price_dec(pair)
+    # print('price_cell', price_cell)
     # lever is a leverage value
     lever = 'none'
 
     # vol_min is a minimum order size. It depends on base currency
     vol_min = inc.get_vol_min(base)
+    print('vol_min', vol_min)
 
     # get best ask/bid from ticker
     ask = float(ticker.get(pair).get('a')[0])
+    print('ask', ask)
     bid = float(ticker.get(pair).get('b')[0])
+    print('bid', bid)
+    return
 
     # sells is an array of sell orders data
     sells = []
@@ -74,9 +86,8 @@ def trade(base, quote, pair0, bal, orders, k, ticker):
                 # ( library instance, order info, pair, direction of order,
                 # size of order, price, userref, txid of existing order,
                 # price precision, leverage, logger instance, oflags )
-                res = inc.check4trade(
-                    k, order1, pair, i[3], i[0], i[1], i[2], txid1,
-                    price_cell, lever, logger, 'post')
+                res = inc.check4trade(k, order1, pair, i[3], i[0], i[1], i[2],
+                                      txid1, price_cell, lever, logger, 'post')
                 print(res)
                 logger.info('traded: ' + str(res))
             except Exception as e:
@@ -85,10 +96,9 @@ def trade(base, quote, pair0, bal, orders, k, ticker):
         # cancel existing order if new order size is less than minimum
         else:
             res = inc.check4cancel(k, order1, txid1)
-            print('Not enough funds to ',
-                  i[3], pair0, 'or trade vol too small; canceling', res)
-            logger.info('Not enough funds to ' +
-                        str(i[3]) + ' ' + pair0 +
+            print('Not enough funds to ', i[3], pair0,
+                  'or trade vol too small; canceling', res)
+            logger.info('Not enough funds to ' + str(i[3]) + ' ' + pair0 +
                         ' or trade vol too small; canceling ' + str(res))
         if res != -1:
             if 'error' in res and res.get('error') != []:

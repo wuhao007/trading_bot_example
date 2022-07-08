@@ -14,7 +14,6 @@
 # General Public LICENSE along with krakenex. If not, see
 # <http://www.gnu.org/licenses/lgpl-3.0.txt> and
 # <http://www.gnu.org/licenses/gpl-3.0.txt>.
-
 """ General-use interface provided by `krakenex`.
 
 Internally, classes are in separate modules, but they are also exported
@@ -38,4 +37,5 @@ to the top-level namespace, so the following uses are possible:
 
 # "public interface"
 from .api import API
+
 __all__ = ['API']

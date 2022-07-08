@@ -14,7 +14,6 @@
 # General Public LICENSE along with krakenex. If not, see
 # <http://www.gnu.org/licenses/lgpl-3.0.txt> and
 # <http://www.gnu.org/licenses/gpl-3.0.txt>.
-
 """ `krakenex` package metadata.
 
 This module is used to store variables that need to be single-sourced

@@ -14,7 +14,6 @@
 # General Public LICENSE along with krakenex. If not, see
 # <http://www.gnu.org/licenses/lgpl-3.0.txt> and
 # <http://www.gnu.org/licenses/gpl-3.0.txt>.
-
 """Kraken.com cryptocurrency Exchange API."""
 
 import requests
@@ -29,6 +28,7 @@ import hmac
 import base64
 
 from . import version
+
 
 class API(object):
     """ Maintains a single session between this machine and Kraken.
@@ -47,6 +47,7 @@ class API(object):
        No query rate limiting is performed.
 
     """
+
     def __init__(self, key='', secret=''):
         """ Create an object with authentication information.
 
@@ -63,7 +64,8 @@ class API(object):
         self.apiversion = '0'
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'krakenex/' + version.__version__ + ' (+' + version.__url__ + ')'
+            'User-Agent':
+            'krakenex/' + version.__version__ + ' (+' + version.__url__ + ')'
         })
         self.response = None
         self._json_options = {}
@@ -131,14 +133,15 @@ class API(object):
 
         url = self.uri + urlpath
 
-        self.response = self.session.post(url, data = data, headers = headers,
-                                          timeout = timeout)
+        self.response = self.session.post(url,
+                                          data=data,
+                                          headers=headers,
+                                          timeout=timeout)
 
         if self.response.status_code not in (200, 201, 202):
             self.response.raise_for_status()
 
         return self.response.json(**self._json_options)
-
 
     def query_public(self, method, data=None, timeout=None):
         """ Performs an API query that does not require a valid key/secret pair.
@@ -159,7 +162,7 @@ class API(object):
 
         urlpath = '/' + self.apiversion + '/public/' + method
 
-        return self._query(urlpath, data, timeout = timeout)
+        return self._query(urlpath, data, timeout=timeout)
 
     def query_private(self, method, data=None, timeout=None):
         """ Performs an API query that requires a valid key/secret pair.
@@ -179,18 +182,16 @@ class API(object):
             data = {}
 
         if not self.key or not self.secret:
-            raise Exception('Either key or secret is not set! (Use `load_key()`.')
+            raise Exception(
+                'Either key or secret is not set! (Use `load_key()`.')
 
         data['nonce'] = self._nonce()
 
         urlpath = '/' + self.apiversion + '/private/' + method
 
-        headers = {
-            'API-Key': self.key,
-            'API-Sign': self._sign(data, urlpath)
-        }
+        headers = {'API-Key': self.key, 'API-Sign': self._sign(data, urlpath)}
 
-        return self._query(urlpath, data, headers, timeout = timeout)
+        return self._query(urlpath, data, headers, timeout=timeout)
 
     def _nonce(self):
         """ Nonce counter.
@@ -198,7 +199,7 @@ class API(object):
         :returns: an always-increasing unsigned integer (up to 64 bits wide)
 
         """
-        return int(1000*time.time())
+        return int(1000 * time.time())
 
     def _sign(self, data, urlpath):
         """ Sign request data according to Kraken's scheme.
@@ -215,8 +216,8 @@ class API(object):
         encoded = (str(data['nonce']) + postdata).encode()
         message = urlpath.encode() + hashlib.sha256(encoded).digest()
 
-        signature = hmac.new(base64.b64decode(self.secret),
-                             message, hashlib.sha512)
+        signature = hmac.new(base64.b64decode(self.secret), message,
+                             hashlib.sha512)
         sigdigest = base64.b64encode(signature.digest())
 
         return sigdigest.decode()
