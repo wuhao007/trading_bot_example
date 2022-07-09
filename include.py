@@ -5,7 +5,7 @@ import config
 # ---------------- Set up logger for writing logs
 
 
-def setup_logger(name, log_file, level=logging.INFO, add_time='yes'):
+def setup_logger(name, log_file, level=logging.INFO, add_time=True):
     """Function setup as many loggers as you want"""
 
     formatter = logging.Formatter(
@@ -14,7 +14,7 @@ def setup_logger(name, log_file, level=logging.INFO, add_time='yes'):
 
     path = config.path_logs
 
-    if add_time == 'yes':
+    if add_time:
         hour = time.strftime("%m-%d_%H", time.gmtime(time.time())) + '_'
     else:
         hour = '001_'
@@ -49,8 +49,8 @@ def get_order(opened, ref, pair0, k):
     order1 = -1
     open2 = -1
     for open1 in opened:
-        if opened.get(open1).get('userref') == ref and \
-                opened.get(open1).get('descr').get('pair') == pair0:
+        if opened.get(open1).get('userref') == ref and opened.get(open1).get(
+                'descr').get('pair') == pair0:
             if order1 != -1:
                 close_k = k.query_private('CancelOrder', {'txid': open1})
                 print("canceled", open1, close_k)
@@ -126,7 +126,7 @@ def check4cancel(k, order, txid):
 
 def get_vol_min(asset):
     tr = {'USDT': 5, 'USDC': 5}
-    return tr[asset]
+    return tr.get(asset, 5)
 
 
 # ---------------- Return price precision
