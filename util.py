@@ -3,7 +3,6 @@ import os
 import logging
 import config
 
-
 _TR = {'USDT': 5, 'USDC': 5}
 
 # ---------------- Set up logger for writing logs

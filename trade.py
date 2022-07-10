@@ -81,8 +81,8 @@ def trade(pair, bal, orders, api, ticker):
             # size of order, price, userref, txid of existing order,
             # price precision, leverage, logger instance, oflags )
             res = util.check4trade(api, order, altname, buy.direction_of_order,
-                                   buy.order_size, buy.price, buy.userref, txid,
-                                   price_cell, lever, logger, 'post')
+                                   buy.order_size, buy.price, buy.userref,
+                                   txid, price_cell, lever, logger, 'post')
             logger.info('traded: %s', res)
         # cancel existing order if new order size is less than minimum
         else:
