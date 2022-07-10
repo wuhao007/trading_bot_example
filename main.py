@@ -47,7 +47,7 @@ def Run(pairs):
     # print('bal', bal)
     # start trading algorithm for all pairs
     for pair in pairs:
-        trade.trade(pair[0], pair[1], pair[2], bal, orders, api, ticker['result'])
+        trade.trade(pair, bal, orders, api, ticker['result'])
 
     # stop the logger
     logger.handlers.pop()

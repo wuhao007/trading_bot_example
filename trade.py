@@ -6,7 +6,7 @@ import time
 # Trade part
 
 
-def trade(base, quote, pair, bal, orders, api, ticker):
+def trade(pair, bal, orders, api, ticker):
     # construct pair from base and quote. USDCUSD is an exception
     # print('base', base)
     # print('quote', quote)
@@ -17,6 +17,7 @@ def trade(base, quote, pair, bal, orders, api, ticker):
     # print('ticker', ticker)
 
     # start logger
+    base, quote, pair = pair.base_asset, pair.quote_asset, pair.altname
     logger = util.setup_logger(pair, pair)
     logger.info(
         '------------------------- New case --------------------------------')
@@ -68,9 +69,9 @@ def trade(base, quote, pair, bal, orders, api, ticker):
     # iterate through buys and sells level
     for buy in buys:
         # get order infor for particular buy/sell level
-        order1, txid1 = util.get_order(orders, buy.userref, pair, api)
+        order, txid = util.get_order(orders, buy.userref, pair, api)
         # print('txid1', txid1)
-        logger.info('txid1 = %s', txid1)
+        logger.info('txid = %s', txid)
         # print('buy', buy)
 
         # check for minimum order size and continue
@@ -79,13 +80,13 @@ def trade(base, quote, pair, bal, orders, api, ticker):
             # ( library instance, order info, pair, direction of order,
             # size of order, price, userref, txid of existing order,
             # price precision, leverage, logger instance, oflags )
-            res = util.check4trade(api, order1, pair, buy.direction_of_order,
-                                   buy.order_size, buy.price, buy.userref, txid1,
+            res = util.check4trade(api, order, pair, buy.direction_of_order,
+                                   buy.order_size, buy.price, buy.userref, txid,
                                    price_cell, lever, logger, 'post')
             logger.info('traded: %s', res)
         # cancel existing order if new order size is less than minimum
         else:
-            res = util.check4cancel(api, order1, txid1)
+            res = util.check4cancel(api, order, txid)
             # print('Not enough funds to ', buy[3], pair,
             #       'or trade vol too small; canceling', res)
             logger.info(

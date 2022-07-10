@@ -3,6 +3,9 @@ import os
 import logging
 import config
 
+
+_TR = {'USDT': 5, 'USDC': 5}
+
 # ---------------- Set up logger for writing logs
 
 
@@ -33,10 +36,11 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
 
 
 def get_ticker_pairs(pairs):
-    res = pairs[0][2]
+    res = pairs[0].altname
     n = len(pairs)
     for i in range(1, n):
-        res = res + ',' + pairs[i][2]
+        res += f',{pairs[i].altname}'
+
     return res
 
 
@@ -114,19 +118,18 @@ def check4trade(k, order, pair, buyorsell, vol, price, ref, txid, price_cell,
 # --------------- Only cancel if order exist (!=-1)
 
 
-def check4cancel(k, order, txid):
-    close_k = -1
+def check4cancel(api, order, txid):
+    close_api = -1
     if order != -1:
-        close_k = k.query_private('CancelOrder', {'txid': txid})
-    return close_k
+        close_api = api.query_private('CancelOrder', {'txid': txid})
+    return close_api
 
 
 # --------------- Return Minimum Volume depending on asset
 
 
 def get_vol_min(asset):
-    tr = {'USDT': 5, 'USDC': 5}
-    return tr.get(asset, 5)
+    return _TR.get(asset, 5)
 
 
 # ---------------- Return price precision
