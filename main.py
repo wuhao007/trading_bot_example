@@ -15,7 +15,7 @@ def Run(pairs):
     # loading path to API keys
     api.load_key(os.path.join(config.path_key, 'k0.key'))
     # get Open Orders from API
-    orders = api.query_private('OpenOrders')
+    # orders = api.query_private('OpenOrders')
     # print('order_all', orders_all)
     # get Balance from API
     balance = api.query_private('Balance')
@@ -30,11 +30,11 @@ def Run(pairs):
     # print('asset_pairs', json.dumps(asset_pairs, indent=4))
 
     # sanity check: checking OpenOrders result and retry if needed
-    if orders.get('error'):
-        logger.warning('Order error %s', orders.get('error'))
-        orders = api.query_private('OpenOrders').get('result').get('open')
-    else:
-        orders = orders.get('result').get('open')
+    # if orders.get('error'):
+    #     logger.warning('Order error %s', orders.get('error'))
+    #     orders = api.query_private('OpenOrders').get('result').get('open')
+    # else:
+    #     orders = orders.get('result').get('open')
 
     # sanity check: checking Balance result and retry if needed
     if balance.get('error'):
@@ -47,7 +47,7 @@ def Run(pairs):
     # print('bal', bal)
     # start trading algorithm for all pairs
     for pair in pairs:
-        trade.trade(pair, bal, orders, api, ticker['result'])
+        trade.trade(pair, bal, api, ticker['result'])
 
     # stop the logger
     logger.handlers.pop()

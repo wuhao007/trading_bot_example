@@ -4,7 +4,7 @@ from collections import namedtuple
 import time
 
 
-def trade(pair, bal, orders, api, ticker):
+def trade(pair, bal, api, ticker):
     # construct pair from base and quote. USDCUSD is an exception
     # print('base', base)
     # print('quote', quote)
@@ -29,7 +29,7 @@ def trade(pair, bal, orders, api, ticker):
     price_cell = util.get_price_dec(altname)
     # print('price_cell', price_cell)
     # lever is a leverage value
-    lever = 'none'
+    # lever = 'none'
 
     # vol_min is a minimum order size. It depends on base currency
     vol_min = util.get_vol_min(base)
