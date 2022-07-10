@@ -15,40 +15,39 @@ def Run(pairs):
     # loading path to API keys
     api.load_key(os.path.join(config.path_key, 'k0.key'))
     # get Open Orders from API
-    orders_all = api.query_private('OpenOrders')
+    orders = api.query_private('OpenOrders')
     # print('order_all', orders_all)
     # get Balance from API
-    bal_all = api.query_private('Balance')
+    balance = api.query_private('Balance')
     # print('bal_all', bal_all)
     # constructing pairs as a string to input into Ticker call
-    pairs_t = util.get_ticker_pairs(pairs)
+    pairs_ticker = util.get_ticker_pairs(pairs)
     # print('pairs_t', pairs_t)
     # get prices with Ticker call
-    ticker = api.query_public('Ticker', {'pair': pairs_t})
+    ticker = api.query_public('Ticker', {'pair': pairs_ticker})
     # print('ticker', ticker)
     # asset_pairs = api.query_public('AssetPairs', {'pair': 'XXBTZUSD'})
     # print('asset_pairs', json.dumps(asset_pairs, indent=4))
 
     # sanity check: checking OpenOrders result and retry if needed
-    if orders_all.get('error'):
-        logger.warning('Order error %s', orders_all.get('error'))
+    if orders.get('error'):
+        logger.warning('Order error %s', orders.get('error'))
         orders = api.query_private('OpenOrders').get('result').get('open')
     else:
-        orders = orders_all.get('result').get('open')
+        orders = orders.get('result').get('open')
 
     # sanity check: checking Balance result and retry if needed
-    if bal_all.get('error'):
-        logger.warning('Balance error %s', bal_all.get('error'))
+    if balance.get('error'):
+        logger.warning('Balance error %s', balance.get('error'))
         bal = api.query_private('Balance').get('result')
     else:
-        bal = bal_all.get('result')
+        bal = balance.get('result')
 
     # print('orders', orders)
     # print('bal', bal)
     # start trading algorithm for all pairs
-    for i in range(len(pairs)):
-        trade.trade(pairs[i][0], pairs[i][1], pairs[i][2], bal, orders, api,
-                    ticker['result'])
+    for pair in pairs:
+        trade.trade(pair[0], pair[1], pair[2], bal, orders, api, ticker['result'])
 
     # stop the logger
     logger.handlers.pop()
