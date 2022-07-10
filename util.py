@@ -1,4 +1,5 @@
 import time
+import os
 import logging
 import config
 
@@ -12,14 +13,13 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logging.Formatter.converter = time.gmtime
 
-    path = config.path_logs
-
     if add_time:
-        hour = time.strftime("%m-%d_%H", time.gmtime(time.time())) + '_'
+        hour = time.strftime("%m-%d_%H", time.gmtime(time.time()))
     else:
-        hour = '001_'
+        hour = '001'
 
-    handler = logging.FileHandler(path + hour + log_file + '.log')
+    handler = logging.FileHandler(
+        os.path.join(config.path_logs, f'{hour}_{log_file}.log'))
     handler.setFormatter(formatter)
 
     logger = logging.getLogger(name)
@@ -136,4 +136,4 @@ def get_price_dec(pair):
     res = 1  # USD, EUR to XBT is included here
     if pair in ['USDTZUSD', 'USDCUSD']:
         res = 4
-    return '%.' + str(res) + 'f'
+    return f'%.{res}f'

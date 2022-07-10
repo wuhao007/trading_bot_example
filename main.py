@@ -2,17 +2,18 @@
 
 import krakenex
 import util
+import os
 import trade
 import config
 
 
-def Trade(pairs):
+def Run(pairs):
     # starting logger
-    logger = util.setup_logger('trade', 'trade')
+    logger = util.setup_logger('run', 'run')
     # loading Kraken library and key
     api = krakenex.API()
     # loading path to API keys
-    api.load_key(config.path_key + 'k0.key')
+    api.load_key(os.path.join(config.path_key, 'k0.key'))
     # get Open Orders from API
     orders_all = api.query_private('OpenOrders')
     # print('order_all', orders_all)
@@ -47,19 +48,12 @@ def Trade(pairs):
     # start trading algorithm for all pairs
     for i in range(len(pairs)):
         trade.trade(pairs[i][0], pairs[i][1], pairs[i][2], bal, orders, api,
-                   ticker['result'])
+                    ticker['result'])
 
     # stop the logger
     logger.handlers.pop()
 
 
-def Run():
-    try:
-        # getting bot trading pairs from config file
-        Trade(config.pairs)
-    except Exception as e:
-        print(e)
-
-
 if __name__ == "__main__":
-    Run()
+    # getting bot trading pairs from config file
+    Run(config.pairs)

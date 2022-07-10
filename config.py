@@ -1,6 +1,6 @@
 # your local path to API keys and logs folder
-path_key = '/Users/sunny/key/'
-path_logs = '/tmp/'
+path_key = '/Users/sunny/key'
+path_logs = '/tmp'
 
 # sell_levels and buy_levels are lists of lists. It defines:
 # [ [ percented of balance to trade, price level, unique userref ], [ ... ] ]
