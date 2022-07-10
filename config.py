@@ -8,10 +8,11 @@ path_logs = '/Users/sunny/trading_bot_example/logs'
 # BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
 # ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
 # MATIC $2 4 hours = $5 10 hours
+# https://support.kraken.com/hc/en-us/articles/4521313131540-Price-and-volume-decimal-precision
 BUY_LEVELS = {
-    'XXBTZUSD': 1.06,
-    'XETHZUSD': 0.78,
-    'MATICUSD': 2
+    'XXBTZUSD': 0.0001, 
+    'XETHZUSD': 0.01, 
+    'MATICUSD': 2.5,
 }
 
 # {'XXBT': '0.0000097500', 'DAI': '0.0000000000', 'XETC': '0.0000039000',

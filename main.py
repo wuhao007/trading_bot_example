@@ -57,4 +57,3 @@ def main(coin):
 if __name__ == "__main__":
     # getting bot trading pairs from config file
     main(sys.argv[1])
-    
