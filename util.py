@@ -40,9 +40,9 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
     return logger
 
 
-def get_ticker_pairs(pairs):
+def get_ticker_pairs(pair):
     """Return pairs string for ticker call."""
-    return ','.join(pair.altname for pair in pairs)
+    return pair.altname
 
 
 def get_order(opened, ref, pair, api):

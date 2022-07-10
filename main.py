@@ -5,11 +5,13 @@ import util
 import os
 import trade
 import config
+import sys
 
 
-def Run(pairs):
+def main(coin):
     # starting logger
-    logger = util.setup_logger('run', 'run')
+    pair = config.PAIRS[coin]
+    logger = util.setup_logger('main', 'main')
     # loading Kraken library and key
     api = krakenex.API()
     # loading path to API keys
@@ -21,7 +23,7 @@ def Run(pairs):
     balance = api.query_private('Balance')
     # print('bal_all', bal_all)
     # constructing pairs as a string to input into Ticker call
-    pairs_ticker = util.get_ticker_pairs(pairs)
+    pairs_ticker = util.get_ticker_pairs(pair)
     # print('pairs_t', pairs_t)
     # get prices with Ticker call
     ticker = api.query_public('Ticker', {'pair': pairs_ticker})
@@ -46,8 +48,7 @@ def Run(pairs):
     # print('orders', orders)
     # print('bal', bal)
     # start trading algorithm for all pairs
-    for pair in pairs:
-        trade.trade(pair, bal, api, ticker['result'])
+    trade.trade(pair, bal, api, ticker['result'])
 
     # stop the logger
     logger.handlers.pop()
@@ -55,4 +56,5 @@ def Run(pairs):
 
 if __name__ == "__main__":
     # getting bot trading pairs from config file
-    Run(config.pairs)
+    main(sys.argv[1])
+    

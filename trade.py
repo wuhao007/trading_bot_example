@@ -1,5 +1,5 @@
 import util
-from config import buy_levels
+import config
 from collections import namedtuple
 import time
 
@@ -52,44 +52,42 @@ def trade(pair, bal, api, ticker):
     # logger.info('sells ' + str(sells))
 
     # buys is an array of buy orders data
-    buys = []
     Buy = namedtuple('Buy', 'order_size, price, userref, direction_of_trade')
-    for i in buy_levels:
+    # for i in buy_levels:
         # Don't cross the book. Skip buy levele if buy level >= best ask
         # if i >= ask:
         #     logger.info('%s buy level >= ask', i)
         #     continue
         # add buy level: [ order size, price, userref, direction of trade ]
-        buys.append(Buy(i / ask, ask, str(int(1000 * time.time())), 'buy'))
-    logger.info('buys %s', buys)
+    buy = Buy(config.BUY_LEVELS[altname] / ask, ask, str(int(1000 * time.time())), 'buy')
+    logger.info('buy %s', buy)
 
     # -------------- Check for trade @ Kraken
     # iterate through buys and sells level
-    for buy in buys:
-        # get order infor for particular buy/sell level
-        # order, txid = util.get_order(orders, buy.userref, altname, api)
-        # print('txid1', txid1)
-        # logger.info('txid = %s', txid)
-        # print('buy', buy)
+    # get order infor for particular buy/sell level
+    # order, txid = util.get_order(orders, buy.userref, altname, api)
+    # print('txid1', txid1)
+    # logger.info('txid = %s', txid)
+    # print('buy', buy)
 
-        # check for minimum order size and continue
-        if buy.order_size >= vol_min:
-            # submit following data and place or update order:
-            # ( library instance, order info, altname, direction of order,
-            # size of order, price, userref, txid of existing order,
-            # price precision, leverage, logger instance, oflags )
-            res = util.check4trade(api, altname, buy.direction_of_order,
-                                   buy.order_size, buy.price, buy.userref,
-                                   price_cell, 'post')
-            logger.info('traded: %s', res)
-            if res != -1:
-                if 'error' in res and res.get('error'):
-                    logger.warning('%s trading error %s', altname, res)
-        # cancel existing order if new order size is less than minimum
-        else:
-            # res = util.check4cancel(api, order, txid)
-            # print('Not enough funds to ', buy[3], altname,
-            #       'or trade vol too small; canceling', res)
-            logger.info('Not enough funds to %s %s or trade vol too small',
-                        buy.direction_of_trade, altname)
+    # check for minimum order size and continue
+    if buy.order_size >= vol_min:
+        # submit following data and place or update order:
+        # ( library instance, order info, altname, direction of order,
+        # size of order, price, userref, txid of existing order,
+        # price precision, leverage, logger instance, oflags )
+        res = util.check4trade(api, altname, buy.direction_of_order,
+                                buy.order_size, buy.price, buy.userref,
+                                price_cell, 'post')
+        logger.info('traded: %s', res)
+        if res != -1:
+            if 'error' in res and res.get('error'):
+                logger.warning('%s trading error %s', altname, res)
+    # cancel existing order if new order size is less than minimum
+    else:
+        # res = util.check4cancel(api, order, txid)
+        # print('Not enough funds to ', buy[3], altname,
+        #       'or trade vol too small; canceling', res)
+        logger.info('Not enough funds to %s %s or trade vol too small',
+                    buy.direction_of_trade, altname)
     logger.handlers.pop()

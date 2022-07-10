@@ -5,7 +5,14 @@ path_logs = '/Users/sunny/trading_bot_example/logs'
 
 # sell_levels and buy_levels are lists of lists. It defines:
 # [ [ percented of balance to trade, price level, unique userref ], [ ... ] ]
-buy_levels = [1.06]
+# BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
+# ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
+# MATIC $2 4 hours = $5 10 hours
+BUY_LEVELS = {
+    'XXBTZUSD': 1.06,
+    'XETHZUSD': 0.78,
+    'MATICUSD': 2
+}
 
 # {'XXBT': '0.0000097500', 'DAI': '0.0000000000', 'XETC': '0.0000039000',
 # 'DOT': '0.0020759200', 'DOT.S': '0.0000000000', 'USDT': '0.00004210',
@@ -14,4 +21,8 @@ buy_levels = [1.06]
 # pairs is a list if list that defines tradable pairs and assets:
 # [ [ base asset, quote asset, altname from AssetPairs endpoint ], [ ... ] ]
 Pair = namedtuple('Pair', 'base_asset altname')
-pairs = [Pair('ZUSD', 'XXBTZUSD')]
+PAIRS = {
+    'XXBT': Pair('ZUSD', 'XXBTZUSD'),
+    'XETH': Pair('ZUSD', 'XETHZUSD'),
+    'MATIC': Pair('ZUSD', 'MATICUSD')
+}
