@@ -36,12 +36,7 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
 
 
 def get_ticker_pairs(pairs):
-    res = pairs[0].altname
-    n = len(pairs)
-    for i in range(1, n):
-        res += f',{pairs[i].altname}'
-
-    return res
+    return ','.join(pair.altname for pair in pairs)
 
 
 # -------------- Order select
@@ -49,12 +44,12 @@ def get_ticker_pairs(pairs):
 
 # here we use pair and userref to distinguish between orders
 # return txid and order information
-def get_order(opened, ref, pair0, k):
+def get_order(opened, ref, pair, k):
     order1 = -1
     open2 = -1
     for open1 in opened:
         if opened.get(open1).get('userref') == ref and opened.get(open1).get(
-                'descr').get('pair') == pair0:
+                'descr').get('pair') == pair:
             if order1 != -1:
                 close_k = k.query_private('CancelOrder', {'txid': open1})
                 print("canceled", open1, close_k)

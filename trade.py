@@ -17,8 +17,8 @@ def trade(pair, bal, orders, api, ticker):
     # print('ticker', ticker)
 
     # start logger
-    base, quote, pair = pair.base_asset, pair.quote_asset, pair.altname
-    logger = util.setup_logger(pair, pair)
+    base, quote, altname = pair.base_asset, pair.quote_asset, pair.altname
+    logger = util.setup_logger(altname, altname)
     logger.info(
         '------------------------- New case --------------------------------')
     # assign base and quote balance variables. -0.1 is a trick to get rid
@@ -28,7 +28,7 @@ def trade(pair, bal, orders, api, ticker):
     # print('bal_q', quote, bal_q)
     logger.info('%s %s %s %s', base, bal_b, quote, bal_q)
     # price_cell is a price precision variable
-    price_cell = util.get_price_dec(pair)
+    price_cell = util.get_price_dec(altname)
     # print('price_cell', price_cell)
     # lever is a leverage value
     lever = 'none'
@@ -37,9 +37,9 @@ def trade(pair, bal, orders, api, ticker):
     vol_min = util.get_vol_min(base)
 
     # get best ask/bid from ticker
-    ask = float(ticker.get(pair).get('a')[0])
+    ask = float(ticker.get(altname).get('a')[0])
     print('ask', ask)
-    bid = float(ticker.get(pair).get('b')[0])
+    bid = float(ticker.get(altname).get('b')[0])
     print('bid', bid)
 
     # sells is an array of sell orders data
@@ -69,7 +69,7 @@ def trade(pair, bal, orders, api, ticker):
     # iterate through buys and sells level
     for buy in buys:
         # get order infor for particular buy/sell level
-        order, txid = util.get_order(orders, buy.userref, pair, api)
+        order, txid = util.get_order(orders, buy.userref, altname, api)
         # print('txid1', txid1)
         logger.info('txid = %s', txid)
         # print('buy', buy)
@@ -77,22 +77,22 @@ def trade(pair, bal, orders, api, ticker):
         # check for minimum order size and continue
         if buy.order_size >= vol_min:
             # submit following data and place or update order:
-            # ( library instance, order info, pair, direction of order,
+            # ( library instance, order info, altname, direction of order,
             # size of order, price, userref, txid of existing order,
             # price precision, leverage, logger instance, oflags )
-            res = util.check4trade(api, order, pair, buy.direction_of_order,
+            res = util.check4trade(api, order, altname, buy.direction_of_order,
                                    buy.order_size, buy.price, buy.userref, txid,
                                    price_cell, lever, logger, 'post')
             logger.info('traded: %s', res)
         # cancel existing order if new order size is less than minimum
         else:
             res = util.check4cancel(api, order, txid)
-            # print('Not enough funds to ', buy[3], pair,
+            # print('Not enough funds to ', buy[3], altname,
             #       'or trade vol too small; canceling', res)
             logger.info(
                 'Not enough funds to %s %s or trade vol too small; canceling %s',
-                buy.direction_of_trade, pair, res)
+                buy.direction_of_trade, altname, res)
         if res != -1:
             if 'error' in res and res.get('error'):
-                logger.warning('%s trading error %s', pair, res)
+                logger.warning('%s trading error %s', altname, res)
     logger.handlers.pop()
