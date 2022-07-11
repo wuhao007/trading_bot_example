@@ -12,8 +12,11 @@ path_logs = '/Users/sunny/trading_bot_example/logs'
 # https://support.kraken.com/hc/en-us/articles/4521313131540-Price-and-volume-decimal-precision
 BUY_LEVELS = {
     'XXBTZUSD': 0.0001,
+    'BTC/USD': 0.0001,
     'XETHZUSD': 0.01,
+    'ETH/USD': 0.01,
     'MATICUSD': 2.5,
+    'MATIC/USD': 2.5,
 }
 
 # {'XXBT': '0.0000097500', 'DAI': '0.0000000000', 'XETC': '0.0000039000',

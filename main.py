@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import krakenex
-import ftxex
+import ftxusex
 import util
 import os
 import trade
@@ -19,7 +19,7 @@ def Run(pair, exchange):
         api = krakenex.API()
         api.load_key(os.path.join(config.kraken_path_key, 'k0.key'))
     else:
-        api = ftxex.API()
+        api = ftxusex.API()
         api.load_key(os.path.join(config.ftxus_path_key, 'k0.key'))
     # get Open Orders from API
     # orders = api.query_private('OpenOrders')

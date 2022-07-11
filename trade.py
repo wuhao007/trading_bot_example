@@ -10,8 +10,11 @@ import numpy as np
 # MATIC $2 4 hours = $5 10 hours
 _SLEEP_SECONDS = {
     'XXBTZUSD': 10 * 60 / 1.06,
+    'BTC/USD': 10 * 60 / 1.06,
     'XETHZUSD': 10 * 60 / 0.78,
+    'ETH/USD': 10 * 60 / 0.78,
     'MATICUSD': 4 * 60 * 60 / 4,
+    'MATIC/USD': 4 * 60 * 60 / 4,
 }
 
 
@@ -26,7 +29,8 @@ def trade(pair, api):
     # print('ticker', ticker)
 
     # start logger
-    logger = util.setup_logger(pair, pair)
+    log_name = pair.replace('/', '')
+    logger = util.setup_logger(log_name, log_name)
     logger.info(
         '------------------------- New case --------------------------------')
     # assign base and quote balance variables. -0.1 is a trick to get rid

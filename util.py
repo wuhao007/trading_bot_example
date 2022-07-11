@@ -8,12 +8,19 @@ _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING = {'USDT': 5, 'USDC': 5, 'ZUSD': 5}
 # https://support.kraken.com/hc/en-us/articles/4521313131540-Price-and-volume-decimal-precision
 _PRICE_DECIMAL_PRECISION = {
     'XXBTZUSD': 1,
+    'BTC/USD': 1,
     'XBTUSDT': 1,
+    'BTC/USDT': 1,
     'XBTUSDC': 2,
+    'BTC/USDC': 2,
     'XETHZUSD': 2,
+    'ETH/USD': 2,
     'ETHUSDT': 2,
+    'ETH/USDT': 2,
     'ETHUSDC': 2,
-    'MATICUSD': 4
+    'ETH/USDC': 2,
+    'MATICUSD': 4,
+    'MATIC/USD': 4,
 }
 
 
