@@ -5,7 +5,6 @@ import time
 import coingecko
 import numpy as np
 
-
 # BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
 # ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
 # MATIC $2 4 hours = $5 10 hours
@@ -73,7 +72,8 @@ def trade(pair, api):
     #     logger.info('%s buy level >= ask', i)
     #     continue
     # add buy level: [ order size, price, userref, direction of trade ]
-    buy = Buy(config.BUY_LEVELS[pair], ask, np.random.randint(-2147483648, 2147483647, dtype=np.int32),
+    buy = Buy(config.BUY_LEVELS[pair], ask,
+              np.random.randint(-2147483648, 2147483647, dtype=np.int32),
               'buy')
     logger.info('buy %s', buy)
 
@@ -92,13 +92,11 @@ def trade(pair, api):
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
         # price precision, leverage, logger instance, oflags )
-        res = api.add_order(pair, buy.direction_of_trade,
-                               buy.order_size, buy.price, buy.userref,
-                               price_cell, 'post')
+        res = api.add_order(pair, buy.direction_of_trade, buy.order_size,
+                            buy.price, buy.userref, price_cell)
         logger.info('traded: %s', res)
-        if res != -1:
-            if 'error' in res and res.get('error'):
-                logger.warning('%s trading error %s', pair, res)
+        if res.get('error'):
+            logger.warning('%s trading error %s', pair, res)
 
         # print('closed_orders: ', type(closed_orders))
         # orders = []
@@ -111,11 +109,14 @@ def trade(pair, api):
         # orders = [{'cost': cost, 'fee': cost * 0.26 / 100}]
         # cost = sum(
         #     (float(order['cost']) + float(order['fee'])) for order in orders)
-        cost = api.get_cost(buy.userref, pair)
+        result = res.get('result')
+        # result = {'txid': ['O4N3YT-TE4G2-V6SR2D']}
+        if result:
+            cost = max(api.get_cost(buy.userref, result), cost)
 
-        # TODO(haowu) change to use closed order
-        # print('sleep for ', cost * _SLEEP_SECONDS[pair] / 60, 'minutes')
         if buy.price > ahr999_045:
+            logger.info('sleep extra %s minutes',
+                        cost * _SLEEP_SECONDS[pair] / 60)
             time.sleep(cost * _SLEEP_SECONDS[pair])
 
     # cancel existing order if new order size is less than minimum
@@ -125,5 +126,6 @@ def trade(pair, api):
         #       'or trade vol too small; canceling', res)
         logger.info('Not enough funds to %s %s or trade vol too small',
                     buy.direction_of_trade, pair)
+    logger.info('sleep %s minutes', cost * _SLEEP_SECONDS[pair] / 60)
     time.sleep(cost * _SLEEP_SECONDS[pair])
     logger.handlers.pop()

@@ -182,11 +182,15 @@ class API(object):
             raise Exception(
                 'Either key or secret is not set! (Use `load_key()`.')
 
-        data['nonce'] = self._nonce()
+        # data['nonce'] = self._nonce()
 
         urlpath = f'/{method}'
 
-        headers = {'FTXUS-KEY': self.key, 'FTXUS-SIGN': self._sign(data, urlpath), 'FTXUS-TS': str(self._nonce)}
+        headers = {
+            'FTXUS-KEY': self.key,
+            'FTXUS-SIGN': self._sign(data, urlpath),
+            'FTXUS-TS': str(self._nonce())
+        }
 
         return self._query(urlpath, data, headers, timeout=timeout)
 
@@ -218,3 +222,43 @@ class API(object):
         sigdigest = base64.b64encode(signature.digest())
 
         return sigdigest.decode()
+
+    def get_ask_bid(self, pair):
+        """
+        https://ftx.us/api/markets/BTC/USD/orderbook?depth=1
+        {"success":true,"result":{"bids":[[20512.0,5.3274]],"asks":[[20514.0,0.365]]}}
+        """
+        ticker = self.query_public(f'markets/{pair}/orderbook?depth=1')
+        result = ticker['result']
+        return float(result.get('asks')[0][0]), float(result.get('bids')[0][0])
+
+    def add_order(self, pair, buyorsell, vol, price, ref, price_cell):
+        return self.query_private(
+            'orders', {
+                'market': pair,
+                'side': buyorsell,
+                'price': str(price_cell % price),
+                'type': 'limit',
+                'size': str('%.8f' % vol),
+                "reduceOnly": False,
+                "ioc": False,
+                "postOnly": False,
+                "clientId": ref,
+            })
+
+    def get_cost(self, ref, result):
+        """Order select.
+
+        here we use pair and userref to distinguish between orders. 
+        return txid and order information
+        """
+        id = result['id']
+        sleep_time = 1
+        while True:
+            result = self.query_private(f'orders/by_client_id/{ref}').get(
+                'result')
+            if result['status'] == 'closed' and result['id'] == id:
+                return result['filledSize'] * result['avgFillPrice']
+            else:
+                time.sleep(sleep_time)
+                sleep_time *= 2

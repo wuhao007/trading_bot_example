@@ -54,8 +54,10 @@ def get_orders(ref, pair, api):
     # order1 = -1
     # open2 = -1
     results = []
-    for order in api.query_private('ClosedOrders').get('result').get('closed').values():
-        if order.get('userref') == ref and order.get('descr').get('pair') == pair:
+    for order in api.query_private('ClosedOrders').get('result').get(
+            'closed').values():
+        if order.get('userref') == ref and order.get('descr').get(
+                'pair') == pair:
             # if order1 != -1:
             #     close_k = api.query_private('CancelOrder', {'txid': open1})
             #     print("canceled", open1, close_k)

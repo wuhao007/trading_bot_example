@@ -225,9 +225,10 @@ class API(object):
     def get_ask_bid(self, pair):
         ticker = self.query_public('Ticker', {'pair': pair})
         result = ticker['result']
-        return float(result.get(pair).get('a')[0]), float(result.get(pair).get('b')[0])
+        return float(result.get(pair).get('a')[0]), float(
+            result.get(pair).get('b')[0])
 
-    def add_order(self, pair, buyorsell, vol, price, ref, price_cell, post):
+    def add_order(self, pair, buyorsell, vol, price, ref, price_cell):
         return self.query_private(
             'AddOrder', {
                 'pair': pair,
@@ -236,23 +237,35 @@ class API(object):
                 'volume': str('%.8f' % vol),
                 'price': str(price_cell % price),
                 'userref': ref,
-                'oflags': post
+                'oflags': 'post'
             })
-            
-    def get_cost(self, ref, pair):
+
+    def get_cost(self, ref, result):
         """Order select.
 
         here we use pair and userref to distinguish between orders. 
         return txid and order information
         """
-        cost = 0
-        for order in self.query_private('ClosedOrders').get('result').get('closed').values():
-            if order.get('userref') == ref and order.get('descr').get('pair') == pair:
-                # if order1 != -1:
-                #     close_k = api.query_private('CancelOrder', {'txid': open1})
-                #     print("canceled", open1, close_k)
-                #     time.sleep(1)
-                #     continue
-                cost += float(order['cost']) 
-                cost += float(order['fee'])
-        return cost
+        txid = ','.join(result['txid'])
+        sleep_time = 1
+        while True:
+            cost = 0
+            orders = self.query_private('QueryOrders', {
+                'txid': txid,
+                'userref': ref
+            })
+            print('orders ', orders)
+            for order in orders.get('result').values():
+                status = order.get('status')
+                if status == 'closed':
+                    cost += float(order['cost'])
+                    cost += float(order['fee'])
+                elif status in ('pending', 'open'):
+                    time.sleep(sleep_time)
+                    sleep_time *= 2
+                    cost = -1
+                    break
+                elif status in ('canceled', 'expired'):
+                    return cost
+            if cost > 0:
+                return cost
