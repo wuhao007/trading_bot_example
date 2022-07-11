@@ -221,3 +221,38 @@ class API(object):
         sigdigest = base64.b64encode(signature.digest())
 
         return sigdigest.decode()
+
+    def get_ask_bid(self, pair):
+        ticker = self.query_public('Ticker', {'pair': pair})
+        result = ticker['result']
+        return float(result.get(pair).get('a')[0]), float(result.get(pair).get('b')[0])
+
+    def add_order(self, pair, buyorsell, vol, price, ref, price_cell, post):
+        return self.query_private(
+            'AddOrder', {
+                'pair': pair,
+                'type': buyorsell,
+                'ordertype': 'limit',
+                'volume': str('%.8f' % vol),
+                'price': str(price_cell % price),
+                'userref': ref,
+                'oflags': post
+            })
+            
+    def get_cost(self, ref, pair):
+        """Order select.
+
+        here we use pair and userref to distinguish between orders. 
+        return txid and order information
+        """
+        cost = 0
+        for order in self.query_private('ClosedOrders').get('result').get('closed').values():
+            if order.get('userref') == ref and order.get('descr').get('pair') == pair:
+                # if order1 != -1:
+                #     close_k = api.query_private('CancelOrder', {'txid': open1})
+                #     print("canceled", open1, close_k)
+                #     time.sleep(1)
+                #     continue
+                cost += float(order['cost']) 
+                cost += float(order['fee'])
+        return cost

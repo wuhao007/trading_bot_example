@@ -22,9 +22,9 @@ BUY_LEVELS = {
 # 'LINK': '0.0000000000', 'ZUSD': '0.0060', 'XETH': '0.0000000000'}
 # pairs is a list if list that defines tradable pairs and assets:
 # [ [ base asset, quote asset, altname from AssetPairs endpoint ], [ ... ] ]
-Pair = namedtuple('Pair', 'base_asset altname')
-PAIRS = {
-    'XXBT': Pair('ZUSD', 'XXBTZUSD'),
-    'XETH': Pair('ZUSD', 'XETHZUSD'),
-    'MATIC': Pair('ZUSD', 'MATICUSD')
-}
+# Pair = namedtuple('Pair', 'base_asset altname')
+# PAIRS = {
+#     'XXBT': Pair('ZUSD', 'XXBTZUSD'),
+#     'XETH': Pair('ZUSD', 'XETHZUSD'),
+#     'MATIC': Pair('ZUSD', 'MATICUSD')
+# }

@@ -326,13 +326,16 @@ _START_DATE = {
     'basic-attention-token': _BAT_START_DATE,
 }
 
-_KRAKEN2COINGECKO = {
+_API2COINGECKO = {
     'XXBTZUSD': 'bitcoin',
+    'BTC/USD': 'bitcoin',
     'XETHZUSD': 'ethereum',
+    'ETH/USD': 'ethereum',
     'MATICUSD': 'matic-network',
+    'MATIC/USD': 'matic-network',
 }
 
 
 def GetCoinGecko(coin):
-    coingecko_name = _KRAKEN2COINGECKO[coin]
+    coingecko_name = _API2COINGECKO[coin]
     return _GetHaowu999(coingecko_name, 'usd', _START_DATE[coingecko_name])

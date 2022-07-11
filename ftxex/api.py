@@ -63,7 +63,7 @@ class API(object):
         self.uri = 'https://ftx.us/api'
         self.apiversion = '0'
         self.session = requests.Session()
-        self.session.headers.update({})
+        self.session.headers.update({'User-Agent': 'ftxusex/0.1.0'})
         self.response = None
         self._json_options = {}
         return

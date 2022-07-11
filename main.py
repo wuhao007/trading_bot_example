@@ -9,9 +9,9 @@ import config
 import sys
 
 
-def Run(coin, exchange):
+def Run(pair, exchange):
     # starting logger
-    pair = config.PAIRS[coin]
+    # pair = config.PAIRS[coin]
     logger = util.setup_logger('run', 'run')
     # loading Kraken library and key
     # loading path to API keys
@@ -28,10 +28,10 @@ def Run(coin, exchange):
     # balance = api.query_private('Balance')
     # print('bal_all', bal_all)
     # constructing pairs as a string to input into Ticker call
-    pairs_ticker = util.get_ticker_pairs(pair)
+    # pairs_ticker = util.get_ticker_pairs(pair)
     # print('pairs_t', pairs_t)
     # get prices with Ticker call
-    ticker = api.query_public('Ticker', {'pair': pairs_ticker})
+    # ticker = api.query_public('Ticker', {'pair': pairs_ticker})
     # print('ticker', ticker)
     # asset_pairs = api.query_public('AssetPairs', {'pair': 'XXBTZUSD'})
     # print('asset_pairs', json.dumps(asset_pairs, indent=4))
@@ -55,7 +55,7 @@ def Run(coin, exchange):
     # print('orders', orders)
     # print('bal', bal)
     # start trading algorithm for all pairs
-    trade.trade(pair, api, ticker['result'])
+    trade.trade(pair, api)
 
     # stop the logger
     logger.handlers.pop()
