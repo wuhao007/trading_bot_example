@@ -45,25 +45,28 @@ def get_ticker_pairs(pair):
     return pair.altname
 
 
-def get_order(opened, ref, pair, api):
+def get_orders(orders, ref, pair, api):
     """Order select.
 
     here we use pair and userref to distinguish between orders. 
     return txid and order information
     """
-    order1 = -1
-    open2 = -1
-    for open1 in opened:
-        if opened.get(open1).get('userref') == ref and opened.get(open1).get(
-                'descr').get('pair') == pair:
-            if order1 != -1:
-                close_k = api.query_private('CancelOrder', {'txid': open1})
-                print("canceled", open1, close_k)
-                time.sleep(1)
-                continue
-            order1 = opened.get(open1)
-            open2 = open1
-    return order1, open2
+    # order1 = -1
+    # open2 = -1
+    results = []
+    for txid, order in orders.items():
+        if order.get('userref') == ref and order.get('descr').get(
+                'pair') == pair:
+            # if order1 != -1:
+            #     close_k = api.query_private('CancelOrder', {'txid': open1})
+            #     print("canceled", open1, close_k)
+            #     time.sleep(1)
+            #     continue
+            results.append(order)
+    return results
+    # order1 = opened.get(open1)
+    # open2 = open1
+    # return order1, open2
 
 
 def check4trade(api, pair, buyorsell, vol, price, ref, price_cell, post):

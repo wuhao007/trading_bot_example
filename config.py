@@ -1,6 +1,7 @@
 from collections import namedtuple
 # your local path to API keys and logs folder
-path_key = '/Users/sunny/key'
+kraken_path_key = '/Users/sunny/kraken'
+ftxus_path_key = '/Users/sunny/ftxus'
 path_logs = '/Users/sunny/trading_bot_example/logs'
 
 # sell_levels and buy_levels are lists of lists. It defines:
@@ -10,8 +11,8 @@ path_logs = '/Users/sunny/trading_bot_example/logs'
 # MATIC $2 4 hours = $5 10 hours
 # https://support.kraken.com/hc/en-us/articles/4521313131540-Price-and-volume-decimal-precision
 BUY_LEVELS = {
-    'XXBTZUSD': 0.0001, 
-    'XETHZUSD': 0.01, 
+    'XXBTZUSD': 0.0001,
+    'XETHZUSD': 0.01,
     'MATICUSD': 2.5,
 }
 

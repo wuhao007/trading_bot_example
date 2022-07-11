@@ -242,6 +242,7 @@ def _GetRainbowWb(coin, start_date=_BTC_START_DATE, vs_currency='usd'):
 
     return reg
 
+
 #_BTC_START_DATE = '2013-04-27T00:00:00'
 _BTC_START_DATE = '2009-01-03T00:00:00'
 # _GetHaowu999('bitcoin', 'usd', _BTC_START_DATE)
@@ -311,18 +312,18 @@ _BAT_START_DATE = '2017-05-31T00:00:00'
 # _GetHaowu999('basic-attention-token', 'btc', _BAT_START_DATE)
 
 _START_DATE = {
-  'bitcoin': _BTC_START_DATE,
-  'ethereum': _ETH_START_DATE,
-  'thorchain': _RUNE_START_DATE,
-  'binancecoin': _BNB_START_DATE,
-  'matic-network': _MATIC_START_DATE,
-  'chainlink': _LINK_START_DATE,
-  'ftx-token': _FTT_START_DATE,
-  'polkadot': _DOT_START_DATE,
-  'crypto-com-chain': _CRO_START_DATE,
-  'litecoin': _LTC_START_DATE,
-  'fantom': _FTM_START_DATE,
-  'basic-attention-token': _BAT_START_DATE,
+    'bitcoin': _BTC_START_DATE,
+    'ethereum': _ETH_START_DATE,
+    'thorchain': _RUNE_START_DATE,
+    'binancecoin': _BNB_START_DATE,
+    'matic-network': _MATIC_START_DATE,
+    'chainlink': _LINK_START_DATE,
+    'ftx-token': _FTT_START_DATE,
+    'polkadot': _DOT_START_DATE,
+    'crypto-com-chain': _CRO_START_DATE,
+    'litecoin': _LTC_START_DATE,
+    'fantom': _FTM_START_DATE,
+    'basic-attention-token': _BAT_START_DATE,
 }
 
 _KRAKEN2COINGECKO = {
@@ -331,6 +332,7 @@ _KRAKEN2COINGECKO = {
     'MATICUSD': 'matic-network',
 }
 
+
 def GetCoinGecko(coin):
-  coingecko_name = _KRAKEN2COINGECKO[coin]
-  return _GetHaowu999(coingecko_name, 'usd', _START_DATE[coingecko_name])
+    coingecko_name = _KRAKEN2COINGECKO[coin]
+    return _GetHaowu999(coingecko_name, 'usd', _START_DATE[coingecko_name])
