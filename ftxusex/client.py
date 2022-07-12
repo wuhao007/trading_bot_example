@@ -462,12 +462,16 @@ class FtxClient:
         return float(ticker.get('asks')[0][0]), float(ticker.get('bids')[0][0])
 
     def add_order(self, pair, vol, ref):
-        return self.place_order(market=pair,
+        res = self.place_order(market=pair,
                                 side='buy',
                                 price=None,
                                 size=vol,
                                 type='market',
                                 client_id=str(ref))
+        print('res:', res)
+        if res.get('error'):
+            print(pair, 'trading error', res)
+        return self.get_cost(ref, res)
 
     def get_cost(self, ref, result):
         """Order select.
@@ -479,7 +483,7 @@ class FtxClient:
         sleep_time = 1
         while True:
             result = self._get(f'orders/by_client_id/{ref}')
-            if result.get('status') == 'closed' and result.get('id') == id:
+            if (result.get('status'), result.get('id')) == ('closed', id):
                 return result.get('filledSize') * result.get('avgFillPrice')
             else:
                 time.sleep(sleep_time)
