@@ -97,6 +97,7 @@ def get_price_dec(pair):
     """Return price precision."""
     return f'%.{_PRICE_DECIMAL_PRECISION.get(pair)}f'
 
+
 def load_key(path):
     """ Load key and secret from file.
 
