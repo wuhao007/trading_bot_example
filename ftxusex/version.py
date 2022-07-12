@@ -21,5 +21,5 @@ throughout the project.
 
 """
 
-__version__ = '2.1.0'
-__url__ = 'https://github.com/veox/python3-krakenex'
+__version__ = '0.1.0'
+__url__ = 'https://github.com/ftexchange/ftx'

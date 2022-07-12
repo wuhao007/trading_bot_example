@@ -76,7 +76,7 @@ def trade(pair, api):
     #     logger.info('%s buy level >= ask', i)
     #     continue
     # add buy level: [ order size, price, userref, direction of trade ]
-    buy = Buy(config.BUY_LEVELS[pair], ask,
+    buy = Buy(config.BUY_LEVELS.get(pair), ask,
               np.random.randint(-2147483648, 2147483647, dtype=np.int32),
               'buy')
     logger.info('buy %s', buy)
@@ -113,15 +113,15 @@ def trade(pair, api):
         # orders = [{'cost': cost, 'fee': cost * 0.26 / 100}]
         # cost = sum(
         #     (float(order['cost']) + float(order['fee'])) for order in orders)
-        result = res.get('result')
+        print('res ', res)
         # result = {'txid': ['O4N3YT-TE4G2-V6SR2D']}
-        if result:
-            cost = max(api.get_cost(buy.userref, result), cost)
+        if res:
+            cost = max(api.get_cost(buy.userref, res), cost)
 
         if buy.price > ahr999_045:
             logger.info('sleep extra %s minutes',
-                        cost * _SLEEP_SECONDS[pair] / 60)
-            time.sleep(cost * _SLEEP_SECONDS[pair])
+                        cost * _SLEEP_SECONDS.get(pair) / 60)
+            time.sleep(cost * _SLEEP_SECONDS.get(pair))
 
     # cancel existing order if new order size is less than minimum
     else:
@@ -130,6 +130,6 @@ def trade(pair, api):
         #       'or trade vol too small; canceling', res)
         logger.info('Not enough funds to %s %s or trade vol too small',
                     buy.direction_of_trade, pair)
-    logger.info('sleep %s minutes', cost * _SLEEP_SECONDS[pair] / 60)
-    time.sleep(cost * _SLEEP_SECONDS[pair])
+    logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
+    time.sleep(cost * _SLEEP_SECONDS.get(pair))
     logger.handlers.pop()

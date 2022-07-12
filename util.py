@@ -90,9 +90,22 @@ def check4cancel(api, order, txid):
 
 def get_vol_min(asset):
     """Return Minimum Volume depending on asset."""
-    return _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING[asset]
+    return _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING.get(asset)
 
 
 def get_price_dec(pair):
     """Return price precision."""
-    return f'%.{_PRICE_DECIMAL_PRECISION[pair]}f'
+    return f'%.{_PRICE_DECIMAL_PRECISION.get(pair)}f'
+
+def load_key(path):
+    """ Load key and secret from file.
+
+    Expected file format is key and secret on separate lines.
+
+    :param path: path to keyfile
+    :type path: str
+    :returns: None
+
+    """
+    with open(path, 'r') as f:
+        return f.readline().strip(), f.readline().strip()

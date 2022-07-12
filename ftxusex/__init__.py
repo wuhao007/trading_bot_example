@@ -36,6 +36,6 @@ to the top-level namespace, so the following uses are possible:
 """
 
 # "public interface"
-from .api import API
+from .client import FtxClient
 
-__all__ = ['API']
+__all__ = ['FtxClient']

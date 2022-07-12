@@ -16,11 +16,11 @@ def Run(pair, exchange):
     # loading Kraken library and key
     # loading path to API keys
     if exchange == 'kraken':
-        api = krakenex.API()
-        api.load_key(os.path.join(config.kraken_path_key, 'k0.key'))
+        key, secret = util.load_key(os.path.join(config.kraken_path_key, 'k0.key'))
+        api = krakenex.API(key, secret)
     else:
-        api = ftxusex.API()
-        api.load_key(os.path.join(config.ftxus_path_key, 'k0.key'))
+        key, secret = util.load_key(os.path.join(config.ftxus_path_key, 'k0.key'))
+        api = ftxusex.FtxClient(key, secret)
     # get Open Orders from API
     # orders = api.query_private('OpenOrders')
     # print('order_all', orders_all)

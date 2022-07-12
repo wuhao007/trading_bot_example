@@ -224,7 +224,7 @@ class API(object):
 
     def get_ask_bid(self, pair):
         ticker = self.query_public('Ticker', {'pair': pair})
-        result = ticker['result']
+        result = ticker.get('result')
         return float(result.get(pair).get('a')[0]), float(
             result.get(pair).get('b')[0])
 
@@ -246,7 +246,7 @@ class API(object):
         here we use pair and userref to distinguish between orders. 
         return txid and order information
         """
-        txid = ','.join(result['txid'])
+        txid = ','.join(result.get('result').get('txid'))
         sleep_time = 1
         while True:
             cost = 0
@@ -258,8 +258,8 @@ class API(object):
             for order in orders.get('result').values():
                 status = order.get('status')
                 if status == 'closed':
-                    cost += float(order['cost'])
-                    cost += float(order['fee'])
+                    cost += float(order.get('cost'))
+                    cost += float(order.get('fee'))
                 elif status in ('pending', 'open'):
                     time.sleep(sleep_time)
                     sleep_time *= 2
