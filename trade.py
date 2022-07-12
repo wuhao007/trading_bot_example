@@ -40,7 +40,7 @@ def trade(pair, api):
     # print('bal_q', quote, bal_q)
     # logger.info('%s %s', base, bal_b)
     # price_cell is a price precision variable
-    price_cell = util.get_price_dec(pair)
+    # price_cell = util.get_price_dec(pair)
     # print('price_cell', price_cell)
     # lever is a leverage value
     # lever = 'none'
@@ -96,8 +96,7 @@ def trade(pair, api):
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
         # price precision, leverage, logger instance, oflags )
-        res = api.add_order(pair, buy.direction_of_trade, buy.order_size,
-                            buy.price, buy.userref, price_cell)
+        res = api.add_order(pair, buy.order_size, buy.userref)
         logger.info('traded: %s', res)
         if res.get('error'):
             logger.warning('%s trading error %s', pair, res)

@@ -461,11 +461,12 @@ class FtxClient:
         print('ticker ', ticker)
         return float(ticker.get('asks')[0][0]), float(ticker.get('bids')[0][0])
 
-    def add_order(self, pair, buyorsell, vol, price, ref, price_cell):
+    def add_order(self, pair, vol, ref):
         return self.place_order(market=pair,
-                                side=buyorsell,
-                                price=price,
+                                side='buy',
+                                price=None,
                                 size=vol,
+                                type='market',
                                 client_id=str(ref))
 
     def get_cost(self, ref, result):

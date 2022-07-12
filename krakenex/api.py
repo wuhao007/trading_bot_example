@@ -228,14 +228,13 @@ class API(object):
         return float(result.get(pair).get('a')[0]), float(
             result.get(pair).get('b')[0])
 
-    def add_order(self, pair, buyorsell, vol, price, ref, price_cell):
+    def add_order(self, pair, vol, ref):
         return self.query_private(
             'AddOrder', {
                 'pair': pair,
-                'type': buyorsell,
-                'ordertype': 'limit',
-                'volume': str('%.8f' % vol),
-                'price': str(price_cell % price),
+                'type': 'buy',
+                'ordertype': 'market',
+                'volume': str('%.8f' % vol), #'price': str(price_cell % price),
                 'userref': ref,
                 'oflags': 'post'
             })
