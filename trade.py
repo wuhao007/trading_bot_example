@@ -96,10 +96,7 @@ def trade(pair, api):
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
         # price precision, leverage, logger instance, oflags )
-        res = api.add_order(pair, buy.order_size, buy.userref)
-        logger.info('traded: %s', res)
-        if res.get('error'):
-            logger.warning('%s trading error %s', pair, res)
+        cost = api.add_order(pair, buy.order_size, buy.userref)
 
         # print('closed_orders: ', type(closed_orders))
         # orders = []
@@ -112,12 +109,12 @@ def trade(pair, api):
         # orders = [{'cost': cost, 'fee': cost * 0.26 / 100}]
         # cost = sum(
         #     (float(order['cost']) + float(order['fee'])) for order in orders)
-        print('res ', res)
+        # print('res ', res)
         # result = {'txid': ['O4N3YT-TE4G2-V6SR2D']}
-        if res:
-            cost = max(api.get_cost(buy.userref, res), cost)
+        # if res:
+        # cost = max(api.get_cost(buy.userref, res), cost)
 
-        if buy.price > ahr999_045:
+        if cost > ahr999_045:
             logger.info('sleep extra %s minutes',
                         cost * _SLEEP_SECONDS.get(pair) / 60)
             time.sleep(cost * _SLEEP_SECONDS.get(pair))

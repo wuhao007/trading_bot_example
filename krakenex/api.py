@@ -229,7 +229,7 @@ class API(object):
             result.get(pair).get('b')[0])
 
     def add_order(self, pair, vol, ref):
-        return self.query_private(
+        res = self.query_private(
             'AddOrder', {
                 'pair': pair,
                 'type': 'buy',
@@ -238,6 +238,7 @@ class API(object):
                 'userref': ref,
                 'oflags': 'post'
             })
+        return self.get_cost(ref, res)
 
     def get_cost(self, ref, result):
         """Order select.
