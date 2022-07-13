@@ -4,12 +4,13 @@ from collections import namedtuple
 import time
 import coingecko
 import numpy as np
+import math
 
 # BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
 # ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
 # MATIC $2 4 hours = $5 10 hours
 _SLEEP_SECONDS = {
-    'XXBTZUSD': 10 * 60 / 1.06,
+    'XXBTZUSD': 10 * 60 / 1.06, # 1 / cost_in_second 
     'BTC/USD': 10 * 60 / 1.06,
     'XETHZUSD': 10 * 60 / 0.78,
     'ETH/USD': 10 * 60 / 0.78,
@@ -102,10 +103,18 @@ def trade(pair, api):
         response = api.add_order(pair, buy.order_size, buy.userref)
 
         logger.info('response: %s', response)
-        if response.get('error'):
-            logger.info('%s trading error %s', pair, response)
+        # if response.get('error'):
+        #    logger.info('%s trading error %s', pair, response)
 
-        cost = max(bal_start - api.get_total_account_usd_balance(), 0)
+        bal_end = api.get_total_account_usd_balance()
+        sleep_time = 1
+        while math.isclose(bal_start, bal_end):
+            bal_end = api.get_total_account_usd_balance()
+            logger.info('Wait %s second balance change.', sleep_time)
+            time.sleep(sleep_time)
+            sleep_time *= 2
+            
+        cost = max(bal_start - bal_end, 0)
         logger.info('after order cost: %s', cost)
 
         # balance = api.query_private('Balance')
@@ -144,8 +153,7 @@ def trade(pair, api):
         # res = util.check4cancel(api, order, txid)
         # print('Not enough funds to ', buy[3], pair,
         #       'or trade vol too small; canceling', res)
-        logger.info('Not enough funds to %s %s or trade vol too small',
-                    buy.direction_of_trade, pair)
+        logger.info('Not enough funds to buy %s or trade vol too small', pair)
     logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
     time.sleep(cost * _SLEEP_SECONDS.get(pair))
     logger.handlers.pop()

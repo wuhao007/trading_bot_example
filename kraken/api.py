@@ -229,7 +229,7 @@ class API(object):
             result.get(pair).get('b')[0])
 
     def add_order(self, pair, vol, ref):
-        return self.query_private(
+        response = self.query_private(
             'AddOrder',
             {
                 'pair': pair,
@@ -239,6 +239,9 @@ class API(object):
                     '%.8f' % vol),  #'price': str(price_cell % price),
                 'userref': ref,
             })
+        if response.get('error'):
+            raise Exception(response.get('error'))
+        return response.get('result')
 
     def get_total_account_usd_balance(self):
         balance = self.query_private('Balance')
