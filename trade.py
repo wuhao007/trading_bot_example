@@ -9,9 +9,9 @@ import math
 # BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
 # ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
 # MATIC $2 4 hours = $5 10 hours
-# 1 / cost_in_second 
+# 1 / cost_in_second
 _SLEEP_SECONDS = {
-    'XXBTZUSD': 10 * 60 / 1.06, 
+    'XXBTZUSD': 10 * 60 / 1.06,
     'BTC/USD': 10 * 60 / 1.06,
     'XETHZUSD': 10 * 60 / 0.78,
     'ETH/USD': 10 * 60 / 0.78,
