@@ -1,8 +1,0 @@
-2022-07-10 14:11:58,465 - XETHZUSD - INFO - ------------------------- New case --------------------------------
-2022-07-10 14:11:58,466 - XETHZUSD - INFO - ZUSD 0.0060
-2022-07-10 14:11:58,466 - XETHZUSD - INFO - buys [Buy(order_size=0.0009078607033351035, price=1167.58, userref='1657462318466', direction_of_trade='buy')]
-2022-07-10 14:11:58,466 - XETHZUSD - INFO - Not enough funds to buy XETHZUSD or trade vol too small
-2022-07-10 14:17:53,981 - XETHZUSD - INFO - ------------------------- New case --------------------------------
-2022-07-10 14:17:53,982 - XETHZUSD - INFO - ZUSD 0.0060
-2022-07-10 14:17:53,982 - XETHZUSD - INFO - buy Buy(order_size=0.0006672540783766906, price=1168.97, userref='1657462673982', direction_of_trade='buy')
-2022-07-10 14:17:53,983 - XETHZUSD - INFO - Not enough funds to buy XETHZUSD or trade vol too small

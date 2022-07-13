@@ -1,7 +1,0 @@
-2022-07-10 22:31:46,898 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
-2022-07-10 22:31:46,898 - XXBTZUSD - INFO - ZUSD 0.0060
-2022-07-10 22:31:46,898 - XXBTZUSD - INFO - ask 20784.6
-2022-07-10 22:31:46,898 - XXBTZUSD - INFO - bid 20783.0
-2022-07-10 22:31:48,132 - XXBTZUSD - INFO - ahr999 0.45: 23011.259771400346, ahr999 1.2: 37631.670057645075, ahr999x 0.45: 88815.56868942681
-2022-07-10 22:31:48,132 - XXBTZUSD - INFO - buy Buy(order_size=0.0001, price=20784.6, userref='1657492308132', direction_of_trade='buy')
-2022-07-10 22:31:48,132 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
