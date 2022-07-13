@@ -105,8 +105,8 @@ def trade(pair, api):
         if response.get('error'):
             logger.info('%s trading error %s', pair, response)
 
-        cost = max(api.get_total_account_usd_balance() - bal_start, 0)
-        logger.info('after order balance: %s', bal_start)
+        cost = max(bal_start - api.get_total_account_usd_balance(), 0)
+        logger.info('after order cost: %s', cost)
 
         # balance = api.query_private('Balance')
         # if balance.get('error'):
@@ -134,7 +134,7 @@ def trade(pair, api):
         # if res:
         # cost = max(api.get_cost(buy.userref, res), cost)
 
-        if cost > ahr999_045:
+        if (cost / buy.order_size) > ahr999_045:
             logger.info('sleep extra %s minutes',
                         cost * _SLEEP_SECONDS.get(pair) / 60)
             time.sleep(cost * _SLEEP_SECONDS.get(pair))

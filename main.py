@@ -16,7 +16,7 @@ def Run(pair, exchange):
     # loading Kraken library and key
     # loading path to API keys
     key, secret = util.load_key(
-        os.path.join(os.path.expanduser('~'), exchange, 'k0.key'))
+        os.path.join(config.path_key, exchange, 'k0.key'))
     api = getattr(sys.modules[__name__], exchange).API(key, secret)
     # if exchange == 'kraken':
     #     key, secret = util.load_key(
