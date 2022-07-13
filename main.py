@@ -15,7 +15,8 @@ def Run(pair, exchange):
     logger = util.setup_logger('run', 'run')
     # loading Kraken library and key
     # loading path to API keys
-    key, secret = util.load_key(os.path.join(os.path.expanduser('~'), exchange, 'k0.key'))
+    key, secret = util.load_key(
+        os.path.join(os.path.expanduser('~'), exchange, 'k0.key'))
     api = getattr(sys.modules[__name__], exchange).API(key, secret)
     # if exchange == 'kraken':
     #     key, secret = util.load_key(
@@ -68,7 +69,6 @@ def Run(pair, exchange):
 def main():
     while True:
         Run(sys.argv[1], sys.argv[2])
-        break
 
 
 if __name__ == "__main__":

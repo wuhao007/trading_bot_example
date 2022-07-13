@@ -462,29 +462,32 @@ class API(object):
         return float(ticker.get('asks')[0][0]), float(ticker.get('bids')[0][0])
 
     def add_order(self, pair, vol, ref):
-        res = self.place_order(market=pair,
+        return self.place_order(market=pair,
                                 side='buy',
                                 price=None,
                                 size=vol,
                                 type='market',
                                 client_id=str(ref))
-        print('res:', res)
-        if res.get('error'):
-            print(pair, 'trading error', res)
-        return self.get_cost(ref, res)
 
-    def get_cost(self, ref, result):
-        """Order select.
 
-        here we use pair and userref to distinguish between orders. 
-        return txid and order information
-        """
-        id = result.get('id')
-        sleep_time = 1
-        while True:
-            result = self._get(f'orders/by_client_id/{ref}')
-            if (result.get('status'), result.get('id')) == ('closed', id):
-                return result.get('filledSize') * result.get('avgFillPrice')
-            else:
-                time.sleep(sleep_time)
-                sleep_time *= 2
+#        print('res:', res)
+#        if res.get('error'):
+#            print(pair, 'trading error', res)
+#        return self.get_cost(ref, res)
+#
+#    def get_cost(self, ref, result):
+#        """Order select.
+#
+#        here we use pair and userref to distinguish between orders.
+#        return txid and order information
+#        """
+#        id = result.get('id')
+#        sleep_time = 1
+#        while True:
+#            result = self._get(f'orders/by_client_id/{ref}')
+#            if (result.get('status'), result.get('id')) == ('closed', id):
+#                return result.get('filledSize') * result.get('avgFillPrice')
+#            else:
+#                time.sleep(sleep_time)
+#                sleep_time *= 2
+#

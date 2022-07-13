@@ -229,43 +229,49 @@ class API(object):
             result.get(pair).get('b')[0])
 
     def add_order(self, pair, vol, ref):
-        res = self.query_private(
-            'AddOrder', {
+        return self.query_private(
+            'AddOrder',
+            {
                 'pair': pair,
                 'type': 'buy',
                 'ordertype': 'market',
-                'volume': str('%.8f' % vol), #'price': str(price_cell % price),
+                'volume': str(
+                    '%.8f' % vol),  #'price': str(price_cell % price),
                 'userref': ref,
-                'oflags': 'post'
             })
-        return self.get_cost(ref, res)
 
-    def get_cost(self, ref, result):
-        """Order select.
+    def get_total_account_usd_balance(self):
+        balance = self.query_private('Balance')
+        if balance.get('error'):
+            return float(
+                self.query_private('Balance').get('result').get('ZUSD'))
+        else:
+            return float(balance.get('result').get('ZUSD'))
 
-        here we use pair and userref to distinguish between orders. 
-        return txid and order information
-        """
-        txid = ','.join(result.get('result').get('txid'))
-        sleep_time = 1
-        while True:
-            cost = 0
-            orders = self.query_private('QueryOrders', {
-                'txid': txid,
-                'userref': ref
-            })
-            print('orders ', orders)
-            for order in orders.get('result').values():
-                status = order.get('status')
-                if status == 'closed':
-                    cost += float(order.get('cost'))
-                    cost += float(order.get('fee'))
-                elif status in ('pending', 'open'):
-                    time.sleep(sleep_time)
-                    sleep_time *= 2
-                    cost = -1
-                    break
-                elif status in ('canceled', 'expired'):
-                    return cost
-            if cost > 0:
-                return cost
+
+#
+#        # response = {'error': [], 'result': {'txid': ['O4N3YT-TE4G2-V6SR2D']}}
+#        txid = ','.join(response.get('result').get('txid'))
+#        sleep_time = 1
+#        while True:
+#            cost = 0
+#            orders = self.query_private('QueryOrders', {
+#                'txid': txid,
+#                'userref': ref
+#            })
+#            logger.info('orders %s', orders)
+#            for order in orders.get('result').values():
+#                status = order.get('status')
+#                if status == 'closed':
+#                    cost += float(order.get('cost'))
+#                    cost += float(order.get('fee'))
+#                elif status in ('pending', 'open'):
+#                    time.sleep(sleep_time)
+#                    sleep_time *= 2
+#                    cost = -1
+#                    break
+#                elif status in ('canceled', 'expired'):
+#                    return cost
+#            if cost > 0:
+#                return cost
+#

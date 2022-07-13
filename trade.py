@@ -69,16 +69,15 @@ def trade(pair, api):
     # logger.info('sells ' + str(sells))
 
     # buys is an array of buy orders data
-    Buy = namedtuple('Buy', 'order_size, price, userref, direction_of_trade')
+    Buy = namedtuple('Buy', 'order_size, userref')
     # for i in buy_levels:
     # Don't cross the book. Skip buy levele if buy level >= best ask
     # if i >= ask:
     #     logger.info('%s buy level >= ask', i)
     #     continue
     # add buy level: [ order size, price, userref, direction of trade ]
-    buy = Buy(config.BUY_LEVELS.get(pair), ask,
-              np.random.randint(-2147483648, 2147483647, dtype=np.int32),
-              'buy')
+    buy = Buy(config.BUY_LEVELS.get(pair),
+              np.random.randint(-2147483648, 2147483647, dtype=np.int32))
     logger.info('buy %s', buy)
 
     # -------------- Check for trade @ Kraken
@@ -90,13 +89,34 @@ def trade(pair, api):
     # print('buy', buy)
 
     # check for minimum order size and continue
-    cost = buy.price * buy.order_size
-    if buy.price < ahr999_120:
+    price = max(ask, bid)
+    cost = price * buy.order_size
+    if price < ahr999_120:
         # submit following data and place or update order:
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
         # price precision, leverage, logger instance, oflags )
-        cost = api.add_order(pair, buy.order_size, buy.userref)
+        bal_start = api.get_total_account_usd_balance()
+        logger.info('before order balance: %s', bal_start)
+
+        response = api.add_order(pair, buy.order_size, buy.userref)
+
+        logger.info('response: %s', response)
+        if response.get('error'):
+            logger.info('%s trading error %s', pair, response)
+
+        cost = max(api.get_total_account_usd_balance() - bal_start, 0)
+        logger.info('after order balance: %s', bal_start)
+
+        # balance = api.query_private('Balance')
+        # if balance.get('error'):
+        #     logger.warning('Balance error %s', balance.get('error'))
+        #     bal = api.query_private('Balance').get('result')
+        # else:
+        #     bal = balance.get('result')
+        # logger.info('USD Balance %s', bal.get('ZUSD'))
+        # print('bal_all', bal_all)
+        # self.get_cost(ref, res)
 
         # print('closed_orders: ', type(closed_orders))
         # orders = []
