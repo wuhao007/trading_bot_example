@@ -1,0 +1,9 @@
+2022-07-09 23:04:44,971 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - BTC -0.1 USD -0.1
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - buys [[2.3177334421122896e-05, 21572.8, '1657407884972', 'buy'], [1.3906400652673737e-05, 21572.8, '1657407884972', 'buy'], [9.270933768449159e-06, 21572.8, '1657407884972', 'buy']]
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - txid1 = -1
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small; canceling -1
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - txid1 = -1
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small; canceling -1
+2022-07-09 23:04:44,972 - XXBTZUSD - INFO - txid1 = -1
+2022-07-09 23:04:44,973 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small; canceling -1

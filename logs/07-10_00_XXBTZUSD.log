@@ -1,0 +1,5 @@
+2022-07-10 00:45:17,613 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 00:45:17,613 - XXBTZUSD - INFO - BTC 0 USD 0
+2022-07-10 00:45:17,613 - XXBTZUSD - INFO - buys [Buy(order_size=2.3265553022195337e-05, price=21491.0, userref='1657413917613', direction_of_trade='buy')]
+2022-07-10 00:45:17,614 - XXBTZUSD - INFO - txid1 = -1
+2022-07-10 00:45:17,614 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small; canceling -1

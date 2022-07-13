@@ -1,0 +1,31 @@
+2022-07-10 13:33:38,507 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:33:38,508 - XXBTZUSD - INFO - XXBT 0.0000097500 ZUSD 0.0060
+2022-07-10 13:38:31,394 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:38:31,395 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:39:02,297 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:39:02,297 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:39:02,298 - XXBTZUSD - INFO - buys [Buy(order_size=5.035127136960209e-05, price=21052.1, userref='1657460342298', direction_of_trade='buy')]
+2022-07-10 13:40:39,431 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:40:39,431 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:40:39,432 - XXBTZUSD - INFO - buys [Buy(order_size=5.0388370744321805e-05, price=21036.6, userref='1657460439432', direction_of_trade='buy')]
+2022-07-10 13:40:39,432 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
+2022-07-10 13:40:51,250 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:40:51,251 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:40:51,251 - XXBTZUSD - INFO - buys [Buy(order_size=5.0389807948279143e-05, price=21036.0, userref='1657460451251', direction_of_trade='buy')]
+2022-07-10 13:40:51,251 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
+2022-07-10 13:41:34,928 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:41:34,928 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:41:34,929 - XXBTZUSD - INFO - buys [Buy(order_size=5.034577095523976e-05, price=21054.4, userref='1657460494929', direction_of_trade='buy')]
+2022-07-10 13:41:34,929 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
+2022-07-10 13:45:10,749 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:45:10,749 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:45:10,750 - XXBTZUSD - INFO - buys [Buy(order_size=5.038022813688213e-05, price=21040.0, userref='1657460710750', direction_of_trade='buy')]
+2022-07-10 13:45:10,750 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
+2022-07-10 13:45:15,204 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:45:15,205 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:45:15,205 - XXBTZUSD - INFO - buys [Buy(order_size=5.038022813688213e-05, price=21040.0, userref='1657460715205', direction_of_trade='buy')]
+2022-07-10 13:45:15,205 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
+2022-07-10 13:45:17,671 - XXBTZUSD - INFO - ------------------------- New case --------------------------------
+2022-07-10 13:45:17,671 - XXBTZUSD - INFO - ZUSD 0.0060
+2022-07-10 13:45:17,671 - XXBTZUSD - INFO - buys [Buy(order_size=5.038022813688213e-05, price=21040.0, userref='1657460717671', direction_of_trade='buy')]
+2022-07-10 13:45:17,671 - XXBTZUSD - INFO - Not enough funds to buy XXBTZUSD or trade vol too small
