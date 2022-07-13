@@ -14,9 +14,9 @@ BUY_LEVELS = {
     'XXBTZUSD': 0.0001,
     'BTC/USD': 0.0001,
     'XETHZUSD': 0.01,
-    'ETH/USD': 0.01,
+    'ETH/USD': 0.001,
     'MATICUSD': 2.5,
-    'MATIC/USD': 2.5,
+    'MATIC/USD': 10,
 }
 
 # {'XXBT': '0.0000097500', 'DAI': '0.0000000000', 'XETC': '0.0000039000',
