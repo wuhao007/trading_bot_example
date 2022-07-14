@@ -1,4 +1,4 @@
-from collections import namedtuple
+# from collections import namedtuple
 # your local path to API keys and logs folder
 # path_key = '/Users/sunny'
 path_logs = '/Users/sunny/trading_bot_example/logs'
