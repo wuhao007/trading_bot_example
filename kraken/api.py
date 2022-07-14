@@ -228,7 +228,7 @@ class API(object):
         return float(result.get(pair).get('a')[0]), float(
             result.get(pair).get('b')[0])
 
-    def add_order(self, pair, vol, ref):
+    def add_order(self, pair, vol):
         response = self.query_private(
             'AddOrder',
             {
@@ -237,11 +237,23 @@ class API(object):
                 'ordertype': 'market',
                 'volume': str(
                     '%.8f' % vol),  #'price': str(price_cell % price),
-                'userref': ref,
             })
         if response.get('error'):
             raise Exception(response.get('error'))
-        return response.get('result')
+
+        txid = ','.join(response.get('result').get('txid'))
+        while True:
+            order = self.query_private('QueryOrders', {
+                'txid': txid
+            }).get('result').get(txid)
+            status = order.get('status')
+            if status == 'closed':
+                return float(order.get('cost')) + float(order.get('fee'))
+            elif status in ('pending', 'open'):
+                time.sleep(sleep_time)
+                sleep_time *= 2
+            elif status in ('canceled', 'expired'):
+                raise Exception(order)
 
     def get_total_account_usd_balance(self):
         balance = self.query_private('Balance')

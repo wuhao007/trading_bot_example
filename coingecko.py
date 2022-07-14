@@ -22,18 +22,16 @@ _AHR999_W = 5.84
 _AHR999_B = -17.01
 _AHR999_DAYS = 200
 
+# def _Symbol2Id(symbol):
+#     coins_list = requests.get(
+#         'https://api.coingecko.com/api/v3/coins/list').json()
+#    return [coin for coin in coins_list if coin['symbol'] == symbol]
 
-def _Symbol2Id(symbol):
-    coins_list = requests.get(
-        'https://api.coingecko.com/api/v3/coins/list').json()
-    return [coin for coin in coins_list if coin['symbol'] == symbol]
-
-
-def _GetMarkets(vs_currency):
-    coins_list = requests.get(
-        f'https://api.coingecko.com/api/v3/coins/markets?vs_currency={vs_currency}&order=market_cap_desc'
-    ).json()
-    return [coin['id'] for coin in coins_list]
+# def _GetMarkets(vs_currency):
+#     coins_list = requests.get(
+#         f'https://api.coingecko.com/api/v3/coins/markets?vs_currency={vs_currency}&order=market_cap_desc'
+#     ).json()
+#     return [coin['id'] for coin in coins_list]
 
 
 def _GetMarketChart(coin, vs_currency):
@@ -50,8 +48,8 @@ def _GetPrice(coin, vs_currency):
     return price[coin][vs_currency]
 
 
-def _ParseDate(item):
-    return datetime.datetime.fromtimestamp(item / 1000)
+# def _ParseDate(item):
+#    return datetime.datetime.fromtimestamp(item / 1000)
 
 
 def _Date2Timestamp(item):
@@ -64,9 +62,9 @@ def _GetAvgHelper(items):
     return sum(1 / item[1] for item in items)
 
 
-def _GetAvg(items):
-    # return stats.gmean(list(map(lambda item: item[1], items)))
-    return len(items) / _GetAvgHelper(items)
+# def _GetAvg(items):
+#     # return stats.gmean(list(map(lambda item: item[1], items)))
+#     return len(items) / _GetAvgHelper(items)
 
 
 def _GetCoinDays(timestamp, start_date):
@@ -77,36 +75,33 @@ def _GetLogPrice(timestamp, w, b, start_date):
     return 10**(w * math.log(_GetCoinDays(timestamp, start_date), 10) + b)
 
 
-def _GetAhr999(items, w, b, start_date):
-    end_item = items[-1]
-    return end_item[1]**2 / (_GetAvg(items) *
-                             _GetLogPrice(end_item[0], w, b, start_date))
+# def _GetAhr999(items, w, b, start_date):
+#     end_item = items[-1]
+#     return end_item[1]**2 / (_GetAvg(items) *
+#                              _GetLogPrice(end_item[0], w, b, start_date))
+
+# def _GetAhr999x(items, w, b, start_date):
+#     end_item = items[-1]
+#     return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
+#                                         start_date) * 3 / (end_item[1]**2)
 
 
-def _GetAhr999x(items, w, b, start_date):
-    end_item = items[-1]
-    return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
-                                         start_date) * 3 / (end_item[1]**2)
-
-
-def _GetAhr999Prices(coin, vs_currency):
-    ahr999_prices = _GetMarketChart(coin, vs_currency)[-_AHR999_DAYS -
-                                                       1:][:_AHR999_DAYS]
+def _GetAhr999Prices(prices):
+    ahr999_prices = prices[-_AHR999_DAYS - 1:][:_AHR999_DAYS]
     assert len(ahr999_prices) == _AHR999_DAYS, f'{_AHR999_DAYS} items'
     return ahr999_prices
 
-
-def _GetPastAhr999(coin, w, b, start_date, vs_currency):
-    ahr999_prices = _GetAhr999Prices(coin, vs_currency)
-    print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
-    print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
-    print(
-        f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
-    )
-    print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
-    print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
-    print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
-    print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
+# def _GetPastAhr999(coin, w, b, start_date, vs_currency):
+#     ahr999_prices = _GetAhr999Prices(coin, vs_currency)
+#     print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
+#     print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
+#     print(
+#         f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
+#     )
+#     print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
+#     print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
+#     print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
+#     print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
 
 
 def _GetAns(ratio, array, w, b, start_date):
@@ -116,8 +111,8 @@ def _GetAns(ratio, array, w, b, start_date):
     return (-b_ + math.sqrt(b_**2 - 4 * a_ * c_ * ratio)) / (2 * a_)
 
 
-def _GetTodayAhr999(coin, w, b, start_date, vs_currency):
-    ahr999_prices = _GetAhr999Prices(coin, vs_currency)
+def _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices):
+    ahr999_prices = _GetAhr999Prices(prices)
     price = _GetPrice(coin, vs_currency)
     ratio = 0.45
     ahr999_045 = _GetAns(ratio, ahr999_prices, w, b, start_date)
@@ -142,50 +137,47 @@ def _GetTodayAhr999(coin, w, b, start_date, vs_currency):
 
 
 # https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/
-def _GetMa(items, days):
-    return sum(item[1] for item in items[-days:]) / days
+# def _GetMa(items, days):
+#     return sum(item[1] for item in items[-days:]) / days
 
-
-def _GetPiIndicator(coin):
-    pi_prices = _GetMarketChart(coin, 'usd')[-351:][:350]
-    print(_GetMa(pi_prices, 350) * 2, _GetMa(pi_prices, 111))
-
+# def _GetPiIndicator(coin):
+#     pi_prices = _GetMarketChart(coin, 'usd')[-351:][:350]
+#     print(_GetMa(pi_prices, 350) * 2, _GetMa(pi_prices, 111))
 
 # https://www.tradingview.com/symbols/CRYPTOCAP-BTC.D/
-def _GetMarketCap(coin):
-    page = 1
-    total_coins_market = 0
+# def _GetMarketCap(coin):
+#     page = 1
+#     total_coins_market = 0
+#
+#     sleep = 1
+#     while page == 1 or markets:
+#         try:
+#             markets = requests.get(
+#                 f'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page={page}&sparkline=false'
+#             ).json()
+#         except:
+#             time.sleep(sleep)
+#             sleep *= 2
+#             continue
+#
+#         for market in markets:
+#             if market['market_cap'] is not None:
+#                 total_coins_market += market['market_cap']
+#             if market['id'] == coin:
+#                 bitcoin_market = market['market_cap']
+#         else:
+#             page += 1
+#
+#     print(f'{bitcoin_market*100/total_coins_market}%')
 
-    sleep = 1
-    while page == 1 or markets:
-        try:
-            markets = requests.get(
-                f'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page={page}&sparkline=false'
-            ).json()
-        except:
-            time.sleep(sleep)
-            sleep *= 2
-            continue
-
-        for market in markets:
-            if market['market_cap'] is not None:
-                total_coins_market += market['market_cap']
-            if market['id'] == coin:
-                bitcoin_market = market['market_cap']
-        else:
-            page += 1
-
-    print(f'{bitcoin_market*100/total_coins_market}%')
+# def _GetJzr(coin):
+#     jzr_prices = _GetMarketChart(coin, 'usd')[-62:][:61]
+#     print(
+#         f'{sum((jzr_prices[i][1]/jzr_prices[i-1][1] - 1) for i in range(1, len(jzr_prices))) * 100}%'
+#    )
 
 
-def _GetJzr(coin):
-    jzr_prices = _GetMarketChart(coin, 'usd')[-62:][:61]
-    print(
-        f'{sum((jzr_prices[i][1]/jzr_prices[i-1][1] - 1) for i in range(1, len(jzr_prices))) * 100}%'
-    )
-
-
-def _GetWb(coin, start_date, vs_currency, prices):
+def _GetWb(start_date, prices):
     xdata = np.log10(_GetCoinDays(prices[:, 0], start_date)).reshape(-1, 1)
     ydata = np.log10(prices[:, 1])
 
@@ -197,51 +189,50 @@ def _GetWb(coin, start_date, vs_currency, prices):
     #timestamp = _Date2Timestamp('2022-02-22T00:00:00')
     #print(10 ** reg.predict(np.array([[np.log10(_GetCoinDays(timestamp, start_date))]])))
 
-    dates = [_ParseDate(price) for price in prices[:, 0]]
+    # dates = [_ParseDate(price) for price in prices[:, 0]]
     print(f'Score:\033[31m{reg.score(xdata, ydata)}\033[0m')
     print(f'w: {w}, b: {b}')
     return w, b
 
 
-def _GetStartDate(market_chart):
-    return (_ParseDate(market_chart[0][0]) -
-            datetime.timedelta(days=1)).isoformat()
+# def _GetStartDate(market_chart):
+#     return (_ParseDate(market_chart[0][0]) -
+#             datetime.timedelta(days=1)).isoformat()
 
 
 def _GetHaowu999(coin, vs_currency, start_date=None):
-    market_chart = _GetMarketChart(coin, vs_currency)
-    if not start_date:
-        start_date = _GetStartDate(market_chart)
-        print(f'DEBUG: {start_date}')
+    # market_chart = _GetMarketChart(coin, vs_currency)
+    # if not start_date:
+    #     start_date = _GetStartDate(market_chart)
+    #     print(f'DEBUG: {start_date}')
 
     prices = np.array(_GetMarketChart(coin, vs_currency))
 
     # np.delete(prices, -1)
-    w, b = _GetWb(coin, start_date, vs_currency, prices)
+    w, b = _GetWb(start_date, prices)
     # if w <= 0:
     #   return
 
-    _GetPastAhr999(coin, w, b, start_date, vs_currency)
-    return _GetTodayAhr999(coin, w, b, start_date, vs_currency)
+    # _GetPastAhr999(coin, w, b, start_date, vs_currency)
+    return _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices)
 
 
-def _GetRainbowWb(coin, start_date=_BTC_START_DATE, vs_currency='usd'):
-    haowu_prices = np.array(_GetMarketChart(coin, vs_currency))
-    #(haowu_prices, -1)
-    start_date = '2009-01-09T00:00:00'
-    xdata = np.log(_GetCoinDays(haowu_prices[:, 0], start_date)).reshape(-1, 1)
-    ydata = np.log10(haowu_prices[:, 1])
-
-    reg = LinearRegression().fit(xdata, ydata)
-
-    print(reg.score(xdata, ydata))
-    print(reg.coef_)
-    print(reg.intercept_)
-    #timestamp = _Date2Timestamp('2022-02-21T00:00:00')
-    #print(10 ** reg.predict(np.array([[np.log(_GetCoinDays(timestamp, start_date))]])))
-
-    return reg
-
+# def _GetRainbowWb(coin, start_date=_BTC_START_DATE, vs_currency='usd'):
+#     haowu_prices = np.array(_GetMarketChart(coin, vs_currency))
+#     #(haowu_prices, -1)
+#     start_date = '2009-01-09T00:00:00'
+#     xdata = np.log(_GetCoinDays(haowu_prices[:, 0], start_date)).reshape(-1, 1)
+#     ydata = np.log10(haowu_prices[:, 1])
+#
+#     reg = LinearRegression().fit(xdata, ydata)
+#
+#     print(reg.score(xdata, ydata))
+#     print(reg.coef_)
+#     print(reg.intercept_)
+#     #timestamp = _Date2Timestamp('2022-02-21T00:00:00')
+#     #print(10 ** reg.predict(np.array([[np.log(_GetCoinDays(timestamp, start_date))]])))
+#
+#     return reg
 
 #_BTC_START_DATE = '2013-04-27T00:00:00'
 _BTC_START_DATE = '2009-01-03T00:00:00'

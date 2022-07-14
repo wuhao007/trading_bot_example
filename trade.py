@@ -1,10 +1,10 @@
 import util
 import config
-from collections import namedtuple
+# from collections import namedtuple
 import time
 import coingecko
-import numpy as np
-import math
+# import numpy as np
+# import math
 
 # BTC $1.06 10 minutes == $5 per 47.1698113208 minutes
 # ETH $0.78 10 minutes == $5 per 64.1025641026 minutes
@@ -71,16 +71,17 @@ def trade(pair, api):
     # logger.info('sells ' + str(sells))
 
     # buys is an array of buy orders data
-    Buy = namedtuple('Buy', 'order_size, userref')
+    # Buy = namedtuple('Buy', 'order_size, userref')
     # for i in buy_levels:
     # Don't cross the book. Skip buy levele if buy level >= best ask
     # if i >= ask:
     #     logger.info('%s buy level >= ask', i)
     #     continue
     # add buy level: [ order size, price, userref, direction of trade ]
-    buy = Buy(config.BUY_LEVELS.get(pair),
-              np.random.randint(-2147483648, 2147483647, dtype=np.int32))
-    logger.info('buy %s', buy)
+    order_size = config.BUY_LEVELS.get(pair)
+    # buy = Buy(config.BUY_LEVELS.get(pair),
+    #           np.random.randint(-2147483648, 2147483647, dtype=np.int32))
+    logger.info('order_size %s', order_size)
 
     # -------------- Check for trade @ Kraken
     # iterate through buys and sells level
@@ -92,31 +93,43 @@ def trade(pair, api):
 
     # check for minimum order size and continue
     price = max(ask, bid)
-    cost = price * buy.order_size
+    cost = price * order_size
     if price < ahr999_120:
         # submit following data and place or update order:
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
         # price precision, leverage, logger instance, oflags )
-        bal_start = api.get_total_account_usd_balance()
-        logger.info('before order balance: %s', bal_start)
+        # bal_start = api.get_usd_balance()
+        # bal_start = 1998.40127897
+        # logger.info('before order balance: %s', bal_start)
 
-        response = api.add_order(pair, buy.order_size, buy.userref)
+        cost = api.add_order(pair, order_size)
+        # response = 'test'
 
-        logger.info('response: %s', response)
+        logger.info('cost: %s', cost)
         # if response.get('error'):
         #    logger.info('%s trading error %s', pair, response)
 
-        bal_end = api.get_total_account_usd_balance()
-        sleep_time = 1
-        while math.isclose(bal_start, bal_end):
-            bal_end = api.get_total_account_usd_balance()
-            logger.info('Wait %s second balance change.', sleep_time)
-            time.sleep(sleep_time)
-            sleep_time *= 2
+        # bal_end = api.get_usd_balance()
+        # logger.info('after order balance: %s', bal_end)
 
-        cost = max(bal_start - bal_end, 0)
-        logger.info('after order cost: %s', cost)
+        # logger.info('api.get_balances: %s', api.get_balances())
+        # logger.info('api.get_coins: %s', api.get_coins())
+        # logger.info('api.get_total_usd_balance: %s', api.get_total_usd_balance())
+        # logger.info('api.get_all_balances: %s', api.get_all_balances())
+        # logger.info('api.get_total_account_usd_balance: %s', api.get_total_account_usd_balance())
+
+        # sleep_time = 1
+        # while math.isclose(bal_start, bal_end):
+        #     bal_end = api.get_total_account_usd_balance()
+        #     logger.info('Wait %s second balance change.', sleep_time)
+        #     time.sleep(sleep_time)
+        #     sleep_time *= 2
+
+        # cost = max(bal_start - bal_end, 0)
+        # logger.info('cost: %s', cost)
+        # fee = cost - order_cost
+        # logger.info('fee: %s %s', fee * 100 / cost, fee * 100 / order_cost)
 
         # balance = api.query_private('Balance')
         # if balance.get('error'):
@@ -144,10 +157,10 @@ def trade(pair, api):
         # if res:
         # cost = max(api.get_cost(buy.userref, res), cost)
 
-        if (cost / buy.order_size) > ahr999_045:
+        if (cost / order_size) > ahr999_045:
             logger.info('sleep extra %s minutes',
                         cost * _SLEEP_SECONDS.get(pair) / 60)
-            time.sleep(cost * _SLEEP_SECONDS.get(pair))
+            # time.sleep(cost * _SLEEP_SECONDS.get(pair))
 
     # cancel existing order if new order size is less than minimum
     else:
@@ -156,5 +169,5 @@ def trade(pair, api):
         #       'or trade vol too small; canceling', res)
         logger.info('Price %s too high', pair)
     logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
-    time.sleep(cost * _SLEEP_SECONDS.get(pair))
+    # time.sleep(cost * _SLEEP_SECONDS.get(pair))
     logger.handlers.pop()

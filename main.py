@@ -3,20 +3,20 @@
 import kraken
 import ftxus
 import util
-import os
+# import os
 import trade
-import config
+# import config
 import sys
 
 
-def Run(pair, exchange):
+def Run(pair, exchange, key_path):
     # starting logger
     # pair = config.PAIRS[coin]
     logger = util.setup_logger('run', 'run')
     # loading Kraken library and key
     # loading path to API keys
-    key, secret = util.load_key(
-        os.path.join(config.path_key, exchange, 'k0.key'))
+    key, secret = util.load_key(key_path)
+    #    os.path.join(config.path_key, exchange, 'k0.key'))
     api = getattr(sys.modules[__name__], exchange).API(key, secret)
     # if exchange == 'kraken':
     #     key, secret = util.load_key(
@@ -60,6 +60,10 @@ def Run(pair, exchange):
     # print('orders', orders)
     # print('bal', bal)
     # start trading algorithm for all pairs
+    # order_history = api.get_order_history(pair)
+    # logger.info('order_history: %s', order_history)
+    # open_orders = api.get_open_orders(pair)
+    # logger.info('open orders: %s', open_orders)
     trade.trade(pair, api)
 
     # stop the logger
@@ -68,7 +72,8 @@ def Run(pair, exchange):
 
 def main():
     while True:
-        Run(sys.argv[1], sys.argv[2])
+        Run(sys.argv[1], sys.argv[2], sys.argv[3])
+        break
 
 
 if __name__ == "__main__":

@@ -47,51 +47,46 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
     return logger
 
 
-def get_ticker_pairs(pair):
-    """Return pairs string for ticker call."""
-    return pair
+# def get_ticker_pairs(pair):
+#     """Return pairs string for ticker call."""
+#     return pair
 
+# def get_orders(ref, pair, api):
+#     """Order select.
+#
+#     here we use pair and userref to distinguish between orders.
+#     return txid and order information
+#     """
+#     # order1 = -1
+#     # open2 = -1
+#     results = []
+#     for order in api.query_private('ClosedOrders').get('result').get(
+#             'closed').values():
+#         if order.get('userref') == ref and order.get('descr').get(
+#                 'pair') == pair:
+#             # if order1 != -1:
+#             #     close_k = api.query_private('CancelOrder', {'txid': open1})
+#             #     print("canceled", open1, close_k)
+#             #     time.sleep(1)
+#             #     continue
+#             results.append(order)
+#     return results
+#     # order1 = opened.get(open1)
+#     # open2 = open1
+#     # return order1, open2
 
-def get_orders(ref, pair, api):
-    """Order select.
+# def check4trade(api, pair, buyorsell, vol, price, ref, price_cell, post):
+#     """Check for trade this function places or updates orders."""
+#     return api.add_order(pair, buyorsell, vol, price, ref, price_cell, post)
 
-    here we use pair and userref to distinguish between orders. 
-    return txid and order information
-    """
-    # order1 = -1
-    # open2 = -1
-    results = []
-    for order in api.query_private('ClosedOrders').get('result').get(
-            'closed').values():
-        if order.get('userref') == ref and order.get('descr').get(
-                'pair') == pair:
-            # if order1 != -1:
-            #     close_k = api.query_private('CancelOrder', {'txid': open1})
-            #     print("canceled", open1, close_k)
-            #     time.sleep(1)
-            #     continue
-            results.append(order)
-    return results
-    # order1 = opened.get(open1)
-    # open2 = open1
-    # return order1, open2
+# def check4cancel(api, order, txid):
+#     """Only cancel if order exist (!=-1)."""
+#    return api.query_private('CancelOrder',
+#                             {'txid': txid}) if order != -1 else -1
 
-
-def check4trade(api, pair, buyorsell, vol, price, ref, price_cell, post):
-    """Check for trade this function places or updates orders."""
-    return api.add_order(pair, buyorsell, vol, price, ref, price_cell, post)
-
-
-def check4cancel(api, order, txid):
-    """Only cancel if order exist (!=-1)."""
-    return api.query_private('CancelOrder',
-                             {'txid': txid}) if order != -1 else -1
-
-
-def get_vol_min(asset):
-    """Return Minimum Volume depending on asset."""
-    return _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING.get(asset)
-
+# def get_vol_min(asset):
+#     """Return Minimum Volume depending on asset."""
+#     return _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING.get(asset)
 
 # def get_price_dec(pair):
 #     """Return price precision."""
@@ -101,12 +96,12 @@ def get_vol_min(asset):
 def load_key(path):
     """ Load key and secret from file.
 
-    Expected file format is key and secret on separate lines.
+   Expected file format is key and secret on separate lines.
 
-    :param path: path to keyfile
-    :type path: str
-    :returns: None
+   :param path: path to keyfile
+   :type path: str
+   :returns: None
 
-    """
+   """
     with open(path, 'r') as f:
         return f.readline().strip(), f.readline().strip()

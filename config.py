@@ -1,6 +1,6 @@
 from collections import namedtuple
 # your local path to API keys and logs folder
-path_key = '/Users/sunny'
+# path_key = '/Users/sunny'
 path_logs = '/Users/sunny/trading_bot_example/logs'
 
 # sell_levels and buy_levels are lists of lists. It defines:
