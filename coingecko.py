@@ -62,9 +62,9 @@ def _GetAvgHelper(items):
     return sum(1 / item[1] for item in items)
 
 
-# def _GetAvg(items):
-#     # return stats.gmean(list(map(lambda item: item[1], items)))
-#     return len(items) / _GetAvgHelper(items)
+def _GetAvg(items):
+    # return stats.gmean(list(map(lambda item: item[1], items)))
+    return len(items) / _GetAvgHelper(items)
 
 
 def _GetCoinDays(timestamp, start_date):
@@ -75,15 +75,15 @@ def _GetLogPrice(timestamp, w, b, start_date):
     return 10**(w * math.log(_GetCoinDays(timestamp, start_date), 10) + b)
 
 
-# def _GetAhr999(items, w, b, start_date):
-#     end_item = items[-1]
-#     return end_item[1]**2 / (_GetAvg(items) *
-#                              _GetLogPrice(end_item[0], w, b, start_date))
+def _GetAhr999(items, w, b, start_date):
+    end_item = items[-1]
+    return end_item[1]**2 / (_GetAvg(items) *
+                             _GetLogPrice(end_item[0], w, b, start_date))
 
-# def _GetAhr999x(items, w, b, start_date):
-#     end_item = items[-1]
-#     return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
-#                                         start_date) * 3 / (end_item[1]**2)
+def _GetAhr999x(items, w, b, start_date):
+    end_item = items[-1]
+    return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
+                                        start_date) * 3 / (end_item[1]**2)
 
 
 def _GetAhr999Prices(prices):
@@ -91,17 +91,18 @@ def _GetAhr999Prices(prices):
     assert len(ahr999_prices) == _AHR999_DAYS, f'{_AHR999_DAYS} items'
     return ahr999_prices
 
+
 # def _GetPastAhr999(coin, w, b, start_date, vs_currency):
 #     ahr999_prices = _GetAhr999Prices(coin, vs_currency)
-#     print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
-#     print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
-#     print(
-#         f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
-#     )
-#     print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
-#     print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
-#     print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
-#     print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
+    # print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
+    # print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
+    # print(
+    #     f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
+    # )
+    # print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
+    # print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
+    # print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
+    # print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
 
 
 def _GetAns(ratio, array, w, b, start_date):
@@ -113,7 +114,7 @@ def _GetAns(ratio, array, w, b, start_date):
 
 def _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices):
     ahr999_prices = _GetAhr999Prices(prices)
-    price = _GetPrice(coin, vs_currency)
+    # price = _GetPrice(coin, vs_currency)
     ratio = 0.45
     ahr999_045 = _GetAns(ratio, ahr999_prices, w, b, start_date)
     print(f'ahr999={ratio}: {ahr999_045} {vs_currency}')
@@ -123,16 +124,16 @@ def _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices):
     ratio = 0.45
     ahr999x_045 = _GetAns(3 / ratio, ahr999_prices, w, b, start_date)
     print(f'ahr999x={ratio}: {ahr999x_045} {vs_currency}')
-    print(f'Current price: {price} {vs_currency}')
+    # print(f'Current price: {price} {vs_currency}')
     print(f'\033[31m{coin}/{vs_currency}\033[0m')
-    if price < ahr999_045:
-        print('\033[31mBasically a Fire Sale\033[0m')
-    elif price < ahr999_120:
-        print('\033[31mAccumulate\033[0m')
-    elif price < ahr999x_045:
-        print('\033[31mHOLD!\033[0m')
-    else:
-        print('\033[31mFOMO intensifies\033[0m')
+    # if price < ahr999_045:
+    #     print('\033[31mBasically a Fire Sale\033[0m')
+    # elif price < ahr999_120:
+    #     print('\033[31mAccumulate\033[0m')
+    # elif price < ahr999x_045:
+    #     print('\033[31mHOLD!\033[0m')
+    # else:
+    #     print('\033[31mFOMO intensifies\033[0m')
     return ahr999_045, ahr999_120, ahr999x_045
 
 
@@ -214,7 +215,33 @@ def _GetHaowu999(coin, vs_currency, start_date=None):
     #   return
 
     # _GetPastAhr999(coin, w, b, start_date, vs_currency)
-    return _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices)
+    ahr999_prices = _GetAhr999Prices(prices)
+
+    ahr999 = _GetAhr999(ahr999_prices, w, b, start_date)
+    # ahr999x = _GetAhr999x(ahr999_prices, w, b, start_date)
+    print(f'ahr999: {ahr999}')
+    # print(f'ahr999x: {ahr999x}')
+
+    # ratio = 0.45
+    # ahr999_045 = _GetAns(ratio, ahr999_prices, w, b, start_date)
+    # print(f'ahr999={ratio}: {ahr999_045} {vs_currency}')
+    ratio = 1.2
+    ahr999_120 = _GetAns(ratio, ahr999_prices, w, b, start_date)
+    print(f'ahr999={ratio}: {ahr999_120} {vs_currency}')
+    # ratio = 0.45
+    # ahr999x_045 = _GetAns(3 / ratio, ahr999_prices, w, b, start_date)
+    # print(f'ahr999x={ratio}: {ahr999x_045} {vs_currency}')
+    # print(f'Current price: {price} {vs_currency}')
+    # print(f'\033[31m{coin}/{vs_currency}\033[0m')
+    # if price < ahr999_045:
+    #     print('\033[31mBasically a Fire Sale\033[0m')
+    # elif price < ahr999_120:
+    #     print('\033[31mAccumulate\033[0m')
+    # elif price < ahr999x_045:
+    #     print('\033[31mHOLD!\033[0m')
+    # else:
+    #     print('\033[31mFOMO intensifies\033[0m')
+    return ahr999, ahr999_120
 
 
 # def _GetRainbowWb(coin, start_date=_BTC_START_DATE, vs_currency='usd'):

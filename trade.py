@@ -11,16 +11,20 @@ import coingecko
 # MATIC $2 4 hours = $5 10 hours
 # 1 / cost_in_second
 _SLEEP_SECONDS = {
-    'XXBTZUSD': 10 * 60 / 1.06,
-    'BTC/USD': 10 * 60 / 1.06,
-    'XETHZUSD': 10 * 60 / 0.78,
-    'ETH/USD': 10 * 60 / 0.78,
-    'MATICUSD': 4 * 60 * 60 / 4,
-    'MATIC/USD': 4 * 60 * 60 / 4,
+    'XXBTZUSD': 10 * 60 / 0.53,
+    'BTC/USD': 10 * 60 / 0.53,
+    'XETHZUSD': 10 * 60 / 0.39,
+    'ETH/USD': 10 * 60 / 0.39,
+    'MATICUSD': 4 * 60 * 60 / 2,
+    'MATIC/USD': 4 * 60 * 60 / 2,
 }
 
 
-def trade(pair, api):
+def _GetWaitTime(ahr999, pair, cost):
+    return cost * _SLEEP_SECONDS[pair] * (0.5 + (ahr999 - 0.45) / 1.5)
+
+
+def Trade(pair, api):
     # construct pair from base and quote. USDCUSD is an exception
     # print('base', base)
     # print('quote', quote)
@@ -33,8 +37,7 @@ def trade(pair, api):
     # start logger
     log_name = pair.replace('/', '')
     logger = util.setup_logger(log_name, log_name)
-    logger.info(
-        '------------------------- New case --------------------------------')
+    logger.info('------------------------- New case --------------------------------')
     # assign base and quote balance variables. -0.1 is a trick to get rid
     # of rounding issues and insufficient funds error
     # bal_b = bal.get(base, 0)
@@ -55,9 +58,10 @@ def trade(pair, api):
     # bid = float(ticker.get(pair).get('b')[0])
     ask, bid = api.get_ask_bid(pair)
     logger.info('ask %s, bid %s', ask, bid)
-    ahr999_045, ahr999_120, ahr999x_045 = coingecko.GetCoinGecko(pair)
-    logger.info('ahr999 0.45: %s, ahr999 1.2: %s, ahr999x 0.45: %s',
-                ahr999_045, ahr999_120, ahr999x_045)
+    ahr999, ahr999_120 = coingecko.GetCoinGecko(pair)
+    # logger.info('ahr999: %s, ahr999 0.45: %s, ahr999 1.2: %s, ahr999x 0.45: %s',
+    #             ahr999, ahr999_045, ahr999_120, ahr999x_045)
+    logger.info('ahr999: %s, ahr999 1.2: %s', ahr999, ahr999_120)
 
     # sells is an array of sell orders data
     # sells = []
@@ -157,10 +161,10 @@ def trade(pair, api):
         # if res:
         # cost = max(api.get_cost(buy.userref, res), cost)
 
-        if (cost / order_size) > ahr999_045:
-            logger.info('sleep extra %s minutes',
-                        cost * _SLEEP_SECONDS.get(pair) / 60)
-            # time.sleep(cost * _SLEEP_SECONDS.get(pair))
+        # if (cost / order_size) > ahr999_045:
+        sleep_time = _GetWaitTime(ahr999, pair, cost)
+        logger.info('sleep extra %s minutes', sleep_time / 60)
+        time.sleep(sleep_time)
 
     # cancel existing order if new order size is less than minimum
     else:
@@ -168,6 +172,7 @@ def trade(pair, api):
         # print('Not enough funds to ', buy[3], pair,
         #       'or trade vol too small; canceling', res)
         logger.info('Price %s too high', pair)
-    logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
+
+    # logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
     # time.sleep(cost * _SLEEP_SECONDS.get(pair))
     logger.handlers.pop()

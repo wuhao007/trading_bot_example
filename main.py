@@ -64,7 +64,7 @@ def Run(pair, exchange, key_path):
     # logger.info('order_history: %s', order_history)
     # open_orders = api.get_open_orders(pair)
     # logger.info('open orders: %s', open_orders)
-    trade.trade(pair, api)
+    trade.Trade(pair, api)
 
     # stop the logger
     logger.handlers.pop()
