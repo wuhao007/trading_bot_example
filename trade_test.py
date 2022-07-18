@@ -3,6 +3,7 @@ import trade
 
 
 class TestTradeMethods(unittest.TestCase):
+
     def test_get_wait_time(self):
         self.assertEqual(trade._GetWaitTime(1.2, 'ETH/USD', 0.39), 600)
         self.assertEqual(trade._GetWaitTime(1.2, 'XETHZUSD', 0.39), 600)

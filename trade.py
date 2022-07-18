@@ -37,7 +37,8 @@ def Trade(pair, api):
     # start logger
     log_name = pair.replace('/', '')
     logger = util.setup_logger(log_name, log_name)
-    logger.info('------------------------- New case --------------------------------')
+    logger.info(
+        '------------------------- New case --------------------------------')
     # assign base and quote balance variables. -0.1 is a trick to get rid
     # of rounding issues and insufficient funds error
     # bal_b = bal.get(base, 0)
@@ -58,7 +59,8 @@ def Trade(pair, api):
     # bid = float(ticker.get(pair).get('b')[0])
     ask, bid = api.get_ask_bid(pair)
     logger.info('ask %s, bid %s', ask, bid)
-    ahr999, ahr999_120 = coingecko.GetCoinGecko(pair)
+    coin_gecko = coingecko.CoinGecko(pair)
+    ahr999, ahr999_120 = coin_gecko.get_coingecko()
     # logger.info('ahr999: %s, ahr999 0.45: %s, ahr999 1.2: %s, ahr999x 0.45: %s',
     #             ahr999, ahr999_045, ahr999_120, ahr999x_045)
     logger.info('ahr999: %s, ahr999 1.2: %s', ahr999, ahr999_120)
@@ -107,7 +109,7 @@ def Trade(pair, api):
         # bal_start = 1998.40127897
         # logger.info('before order balance: %s', bal_start)
 
-        cost = api.add_order(pair, order_size)
+        cost, avg_fill_price, created_at = api.add_order(pair, order_size)
         # response = 'test'
 
         logger.info('cost: %s', cost)

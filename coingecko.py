@@ -80,10 +80,11 @@ def _GetAhr999(items, w, b, start_date):
     return end_item[1]**2 / (_GetAvg(items) *
                              _GetLogPrice(end_item[0], w, b, start_date))
 
+
 def _GetAhr999x(items, w, b, start_date):
     end_item = items[-1]
     return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
-                                        start_date) * 3 / (end_item[1]**2)
+                                         start_date) * 3 / (end_item[1]**2)
 
 
 def _GetAhr999Prices(prices):
@@ -94,15 +95,15 @@ def _GetAhr999Prices(prices):
 
 # def _GetPastAhr999(coin, w, b, start_date, vs_currency):
 #     ahr999_prices = _GetAhr999Prices(coin, vs_currency)
-    # print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
-    # print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
-    # print(
-    #     f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
-    # )
-    # print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
-    # print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
-    # print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
-    # print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
+# print(f'Date: {_ParseDate(ahr999_prices[-1][0])}')
+# print(f'200 days average price: {_GetAvg(ahr999_prices)} {vs_currency}')
+# print(
+#     f'Log price: {_GetLogPrice(ahr999_prices[-1][0], w, b, start_date)} {vs_currency}'
+# )
+# print(f'Days: {_GetCoinDays(ahr999_prices[-1][0], start_date)} days')
+# print(f'Yesterday price: {ahr999_prices[-1][1]} {vs_currency}')
+# print(f'ahr999: {_GetAhr999(ahr999_prices, w, b, start_date)}')
+# print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
 
 
 def _GetAns(ratio, array, w, b, start_date):
@@ -112,30 +113,29 @@ def _GetAns(ratio, array, w, b, start_date):
     return (-b_ + math.sqrt(b_**2 - 4 * a_ * c_ * ratio)) / (2 * a_)
 
 
-def _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices):
-    ahr999_prices = _GetAhr999Prices(prices)
-    # price = _GetPrice(coin, vs_currency)
-    ratio = 0.45
-    ahr999_045 = _GetAns(ratio, ahr999_prices, w, b, start_date)
-    print(f'ahr999={ratio}: {ahr999_045} {vs_currency}')
-    ratio = 1.2
-    ahr999_120 = _GetAns(ratio, ahr999_prices, w, b, start_date)
-    print(f'ahr999={ratio}: {ahr999_120} {vs_currency}')
-    ratio = 0.45
-    ahr999x_045 = _GetAns(3 / ratio, ahr999_prices, w, b, start_date)
-    print(f'ahr999x={ratio}: {ahr999x_045} {vs_currency}')
-    # print(f'Current price: {price} {vs_currency}')
-    print(f'\033[31m{coin}/{vs_currency}\033[0m')
-    # if price < ahr999_045:
-    #     print('\033[31mBasically a Fire Sale\033[0m')
-    # elif price < ahr999_120:
-    #     print('\033[31mAccumulate\033[0m')
-    # elif price < ahr999x_045:
-    #     print('\033[31mHOLD!\033[0m')
-    # else:
-    #     print('\033[31mFOMO intensifies\033[0m')
-    return ahr999_045, ahr999_120, ahr999x_045
-
+# def _GetTodayAhr999(coin, w, b, start_date, vs_currency, prices):
+#    ahr999_prices = _GetAhr999Prices(prices)
+# price = _GetPrice(coin, vs_currency)
+#    ratio = 0.45
+#    ahr999_045 = _GetAns(ratio, ahr999_prices, w, b, start_date)
+#    print(f'ahr999={ratio}: {ahr999_045} {vs_currency}')
+#    ratio = 1.2
+#    ahr999_120 = _GetAns(ratio, ahr999_prices, w, b, start_date)
+#    print(f'ahr999={ratio}: {ahr999_120} {vs_currency}')
+#    ratio = 0.45
+#    ahr999x_045 = _GetAns(3 / ratio, ahr999_prices, w, b, start_date)
+#    print(f'ahr999x={ratio}: {ahr999x_045} {vs_currency}')
+# print(f'Current price: {price} {vs_currency}')
+#    print(f'\033[31m{coin}/{vs_currency}\033[0m')
+# if price < ahr999_045:
+#     print('\033[31mBasically a Fire Sale\033[0m')
+# elif price < ahr999_120:
+#     print('\033[31mAccumulate\033[0m')
+# elif price < ahr999x_045:
+#     print('\033[31mHOLD!\033[0m')
+# else:
+#     print('\033[31mFOMO intensifies\033[0m')
+#    return ahr999_045, ahr999_120, ahr999x_045
 
 # https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/
 # def _GetMa(items, days):
@@ -201,13 +201,13 @@ def _GetWb(start_date, prices):
 #             datetime.timedelta(days=1)).isoformat()
 
 
-def _GetHaowu999(coin, vs_currency, start_date=None):
+def _GetHaowu999(prices, start_date=None):
     # market_chart = _GetMarketChart(coin, vs_currency)
     # if not start_date:
     #     start_date = _GetStartDate(market_chart)
     #     print(f'DEBUG: {start_date}')
 
-    prices = np.array(_GetMarketChart(coin, vs_currency))
+    # prices = np.array(_GetMarketChart(coin, vs_currency))
 
     # np.delete(prices, -1)
     w, b = _GetWb(start_date, prices)
@@ -227,7 +227,7 @@ def _GetHaowu999(coin, vs_currency, start_date=None):
     # print(f'ahr999={ratio}: {ahr999_045} {vs_currency}')
     ratio = 1.2
     ahr999_120 = _GetAns(ratio, ahr999_prices, w, b, start_date)
-    print(f'ahr999={ratio}: {ahr999_120} {vs_currency}')
+    print(f'ahr999={ratio}: {ahr999_120} USD')
     # ratio = 0.45
     # ahr999x_045 = _GetAns(3 / ratio, ahr999_prices, w, b, start_date)
     # print(f'ahr999x={ratio}: {ahr999x_045} {vs_currency}')
@@ -354,6 +354,12 @@ _API2COINGECKO = {
 }
 
 
-def GetCoinGecko(coin):
-    coingecko_name = _API2COINGECKO[coin]
-    return _GetHaowu999(coingecko_name, 'usd', _START_DATE[coingecko_name])
+class CoinGecko(object):
+
+    def __init__(self, coin):
+        self.coin = _API2COINGECKO[coin]
+        self.prices = np.array(_GetMarketChart(self.coin, 'usd'))
+        self.start_date = _START_DATE[self.coin]
+
+    def get_coingecko(self):
+        return _GetHaowu999(self.prices, self.start_date)
