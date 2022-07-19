@@ -9,7 +9,7 @@ import trade
 import sys
 
 
-def Run(pair, exchange, key_path):
+def Run(pair: str, exchange: str, key_path: str) -> None:
     # starting logger
     # pair = config.PAIRS[coin]
     logger = util.setup_logger('run', 'run')
@@ -70,7 +70,7 @@ def Run(pair, exchange, key_path):
     logger.handlers.pop()
 
 
-def main():
+def main() -> None:
     while True:
         Run(sys.argv[1], sys.argv[2], sys.argv[3])
         break

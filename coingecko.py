@@ -14,6 +14,7 @@ import datetime
 import requests
 from sklearn.linear_model import LinearRegression
 import numpy as np
+from typing import Optional, Dict, Any, List, Tuple
 
 _SECONDS_IN_A_DAY = 24 * 60 * 60 * 1000
 _BTC_START_DATE = '2009-01-03T00:00:00'
@@ -34,60 +35,60 @@ _AHR999_DAYS = 200
 #     return [coin['id'] for coin in coins_list]
 
 
-def _GetMarketChart(coin, vs_currency):
+def _GetMarketChart(coin: str, vs_currency: str) -> List[Tuple[float, float]]:
     market_chart = requests.get(
         f'https://api.coingecko.com/api/v3/coins/{coin}/market_chart?vs_currency={vs_currency}&days=36500&interval=hourly'
     ).json()
     return [price for price in market_chart['prices'] if price[1]]
 
 
-def _GetPrice(coin, vs_currency):
-    price = requests.get(
-        f'https://api.coingecko.com/api/v3/simple/price?ids={coin}&vs_currencies={vs_currency}'
-    ).json()
-    return price[coin][vs_currency]
-
+# def _GetPrice(coin, vs_currency):
+#     price = requests.get(
+#         f'https://api.coingecko.com/api/v3/simple/price?ids={coin}&vs_currencies={vs_currency}'
+#     ).json()
+#    return price[coin][vs_currency]
 
 # def _ParseDate(item):
 #    return datetime.datetime.fromtimestamp(item / 1000)
 
 
-def _Date2Timestamp(item):
+def _Date2Timestamp(item: str) -> float:
     return datetime.datetime.timestamp(
-        datetime.datetime.strptime(item, '%Y-%m-%dT%H:%M:%S')) * 1000
+        datetime.datetime.fromisoformat(item)) * 1000
 
 
 # A script that generates ahr999 index data into a JSON file.
-def _GetAvgHelper(items):
+def _GetAvgHelper(items: np.array) -> float:
     return sum(1 / item[1] for item in items)
 
 
-def _GetAvg(items):
+def _GetAvg(items: np.array) -> float:
     # return stats.gmean(list(map(lambda item: item[1], items)))
     return len(items) / _GetAvgHelper(items)
 
 
-def _GetCoinDays(timestamp, start_date):
+def _GetCoinDays(timestamp: float, start_date: str) -> float:
     return (timestamp - _Date2Timestamp(start_date)) / _SECONDS_IN_A_DAY
 
 
-def _GetLogPrice(timestamp, w, b, start_date):
+def _GetLogPrice(timestamp: float, w: float, b: float,
+                 start_date: str) -> float:
     return 10**(w * math.log(_GetCoinDays(timestamp, start_date), 10) + b)
 
 
-def _GetAhr999(items, w, b, start_date):
+def _GetAhr999(items: np.array, w: float, b: float, start_date: str) -> float:
     end_item = items[-1]
     return end_item[1]**2 / (_GetAvg(items) *
                              _GetLogPrice(end_item[0], w, b, start_date))
 
 
-def _GetAhr999x(items, w, b, start_date):
-    end_item = items[-1]
-    return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
-                                         start_date) * 3 / (end_item[1]**2)
+# def _GetAhr999x(items, w, b, start_date):
+#    end_item = items[-1]
+#    return _GetAvg(items) * _GetLogPrice(end_item[0], w, b,
+#                                         start_date) * 3 / (end_item[1]**2)
 
 
-def _GetAhr999Prices(prices):
+def _GetAhr999Prices(prices: np.array) -> np.array:
     ahr999_prices = prices[-_AHR999_DAYS - 1:][:_AHR999_DAYS]
     assert len(ahr999_prices) == _AHR999_DAYS, f'{_AHR999_DAYS} items'
     return ahr999_prices
@@ -106,7 +107,7 @@ def _GetAhr999Prices(prices):
 # print(f'ahr999x: {_GetAhr999x(ahr999_prices, w, b, start_date)}')
 
 
-def _GetAns(ratio, array, w, b, start_date):
+def _GetAns(ratio, array, w: float, b: float, start_date: str) -> float:
     a_ = _GetAvgHelper(array[-_AHR999_DAYS + 1:])
     b_ = 1
     c_ = -200 * _GetLogPrice(array[-1][0], w, b, start_date)
@@ -178,7 +179,7 @@ def _GetAns(ratio, array, w, b, start_date):
 #    )
 
 
-def _GetWb(start_date, prices):
+def _GetWb(start_date: str, prices: np.array) -> Tuple[float, float]:
     xdata = np.log10(_GetCoinDays(prices[:, 0], start_date)).reshape(-1, 1)
     ydata = np.log10(prices[:, 1])
 
@@ -201,7 +202,8 @@ def _GetWb(start_date, prices):
 #             datetime.timedelta(days=1)).isoformat()
 
 
-def _GetHaowu999(prices, start_date=None):
+def _GetHaowu999(prices: np.array,
+                 start_date: str = None) -> Tuple[float, float]:
     # market_chart = _GetMarketChart(coin, vs_currency)
     # if not start_date:
     #     start_date = _GetStartDate(market_chart)
@@ -356,10 +358,18 @@ _API2COINGECKO = {
 
 class CoinGecko(object):
 
-    def __init__(self, coin):
+    def __init__(self, coin: str) -> None:
         self.coin = _API2COINGECKO[coin]
         self.prices = np.array(_GetMarketChart(self.coin, 'usd'))
         self.start_date = _START_DATE[self.coin]
 
-    def get_coingecko(self):
+    def get_coingecko(self) -> Tuple[float, float]:
         return _GetHaowu999(self.prices, self.start_date)
+
+    def add_own_data(self, date_time: str, price: float) -> None:
+        # sdata = np.log10(_GetCoinDays(prices[:, 0], start_date)).reshape(-1, 1)
+        # ydata = np.log10(prices[:, 1])
+        self.prices = np.append(self.prices,
+                                [[_Date2Timestamp(date_time), price]],
+                                axis=0)
+        # print(self.prices[-1])

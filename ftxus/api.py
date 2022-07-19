@@ -1,6 +1,6 @@
 import time
 import urllib.parse
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Tuple
 
 from requests import Request, Session, Response
 import hmac
@@ -452,7 +452,7 @@ class API(object):
             'subaccount_nickname': subaccount_nickname
         })
 
-    def get_ask_bid(self, pair):
+    def get_ask_bid(self, pair: str) -> Tuple[float, float]:
         """
         https://ftx.us/api/markets/BTC/USD/orderbook?depth=1
         {"success":true,"result":{"bids":[[20512.0,5.3274]],"asks":[[20514.0,0.365]]}}
@@ -461,7 +461,7 @@ class API(object):
         # print('ticker ', ticker)
         return float(ticker.get('asks')[0][0]), float(ticker.get('bids')[0][0])
 
-    def get_order_status(self, order_id: int) -> dict:
+    def get_order_status(self, order_id: int) -> Dict[str, Any]:
         return self._get(f'orders/{order_id}')
 
 #    def get_order_status_by_client_id(self, client_id: int) -> dict:
@@ -475,31 +475,31 @@ class API(object):
     def get_fee_rate(self) -> float:
         return 0.002
 
-    def add_order(self, pair, vol):
-        # response = self.place_order(market=pair,
-        #                            side='buy',
-        #                            price=None,
-        #                            size=vol,
-        #                            type='market')
-        response = {
-            'id': 6315360489,
-            'clientId': '1043601791',
-            'market': 'ETH/USD',
-            'type': 'market',
-            'side': 'buy',
-            'price': None,
-            'size': 0.001,
-            'status': 'new',
-            'filledSize': 0.0,
-            'remainingSize': 0.001,
-            'reduceOnly': False,
-            'liquidation': False,
-            'avgFillPrice': None,
-            'postOnly': False,
-            'ioc': True,
-            'createdAt': '2022-07-14T01:56:57.092580+00:00',
-            'future': None
-        }
+    def add_order(self, pair: str, vol: float) -> Tuple[float, str, float]:
+        response = self.place_order(market=pair,
+                                    side='buy',
+                                    price=None,
+                                    size=vol,
+                                    type='market')
+        # response = {
+        #    'id': 6315360489,
+        #    'clientId': '1043601791',
+        #    'market': 'ETH/USD',
+        #    'type': 'market',
+        #    'side': 'buy',
+        #    'price': None,
+        #    'size': 0.001,
+        #    'status': 'new',
+        #    'filledSize': 0.0,
+        #    'remainingSize': 0.001,
+        #    'reduceOnly': False,
+        #    'liquidation': False,
+        #    'avgFillPrice': None,
+        #    'postOnly': False,
+        #    'ioc': True,
+        #    'createdAt': '2022-07-14T01:56:57.092580+00:00',
+        #    'future': None
+        #}
         order_id = response.get('id')
         sleep_time = 1
         while True:
@@ -507,7 +507,7 @@ class API(object):
             if order.get('status') == 'closed':
                 return order.get('avgFillPrice') * order.get('filledSize') * (
                     1 + self.get_fee_rate()), order.get(
-                        'avgFillPrice'), order.get('createdAt')
+                        'createdAt'), order.get('avgFillPrice')
             else:
                 time.sleep(sleep_time)
                 sleep_time *= 2

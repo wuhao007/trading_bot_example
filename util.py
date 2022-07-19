@@ -2,6 +2,7 @@ import time
 import os
 import logging
 import config
+from typing import Tuple
 
 # https://support.kraken.com/hc/en-us/articles/205893708-Minimum-order-size-volume-for-trading
 # _MINIMUM_ORDER_SIZE_VOLUME_FOR_TRADING = {'USDT': 5, 'USDC': 5, 'ZUSD': 5}
@@ -93,7 +94,7 @@ def setup_logger(name, log_file, level=logging.INFO, add_time=True):
 #     return f'%.{_PRICE_DECIMAL_PRECISION.get(pair)}f'
 
 
-def load_key(path):
+def load_key(path: str) -> Tuple[str, str]:
     """ Load key and secret from file.
 
    Expected file format is key and secret on separate lines.

@@ -3,6 +3,7 @@ import config
 # from collections import namedtuple
 import time
 import coingecko
+import ftxus
 # import numpy as np
 # import math
 
@@ -20,11 +21,11 @@ _SLEEP_SECONDS = {
 }
 
 
-def _GetWaitTime(ahr999, pair, cost):
+def _GetWaitTime(ahr999: float, pair: str, cost: float) -> float:
     return cost * _SLEEP_SECONDS[pair] * (0.5 + (ahr999 - 0.45) / 1.5)
 
 
-def Trade(pair, api):
+def Trade(pair: str, api: ftxus.api.API):
     # construct pair from base and quote. USDCUSD is an exception
     # print('base', base)
     # print('quote', quote)
@@ -100,7 +101,7 @@ def Trade(pair, api):
     # check for minimum order size and continue
     price = max(ask, bid)
     cost = price * order_size
-    if price < ahr999_120:
+    if ahr999 < 1.2 and price < ahr999_120:
         # submit following data and place or update order:
         # ( library instance, order info, pair, direction of order,
         # size of order, price, userref, txid of existing order,
@@ -109,7 +110,8 @@ def Trade(pair, api):
         # bal_start = 1998.40127897
         # logger.info('before order balance: %s', bal_start)
 
-        cost, avg_fill_price, created_at = api.add_order(pair, order_size)
+        cost, created_at, avg_fill_price = api.add_order(pair, order_size)
+        coin_gecko.add_own_data(created_at, avg_fill_price)
         # response = 'test'
 
         logger.info('cost: %s', cost)
@@ -164,6 +166,7 @@ def Trade(pair, api):
         # cost = max(api.get_cost(buy.userref, res), cost)
 
         # if (cost / order_size) > ahr999_045:
+        ahr999, ahr999_120 = coin_gecko.get_coingecko()
         sleep_time = _GetWaitTime(ahr999, pair, cost)
         logger.info('sleep extra %s minutes', sleep_time / 60)
         time.sleep(sleep_time)

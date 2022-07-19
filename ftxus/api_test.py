@@ -5,10 +5,10 @@ import api
 
 class TestApiMethods(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.api = api.API()
 
-    def test_get_ask_bid(self):
+    def test_get_ask_bid(self) -> None:
         self.api._get = MagicMock(return_value={
             "bids": [[20512.0, 5.3274]],
             "asks": [[20514.0, 0.365]]
@@ -18,7 +18,7 @@ class TestApiMethods(unittest.TestCase):
         self.assertEqual(ask, 20514.0)
         self.assertEqual(bid, 20512.0)
 
-    def test_add_order(self):
+    def test_add_order(self) -> None:
         self.api.place_order = MagicMock(
             return_value={
                 'id': 6315360489,
@@ -59,7 +59,7 @@ class TestApiMethods(unittest.TestCase):
                 'createdAt': '2022-07-14T01:56:57.092580+00:00',
                 'future': None
             })
-        cost, avg_fill_price, created_at = self.api.add_order('ETH/USD', 0.001)
+        cost, created_at, avg_fill_price = self.api.add_order('ETH/USD', 0.001)
         self.assertEqual(cost, 1.1119194000000001)
         self.assertEqual(avg_fill_price, 1109.7)
         self.assertEqual(created_at, '2022-07-14T01:56:57.092580+00:00')
