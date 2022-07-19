@@ -1,3 +1,4 @@
+import datetime
 import time
 import urllib.parse
 from typing import Optional, Dict, Any, List, Tuple
@@ -475,39 +476,40 @@ class API(object):
     def get_fee_rate(self) -> float:
         return 0.002
 
-    def add_order(self, pair: str, vol: float) -> Tuple[float, str, float]:
+    def add_order(self, pair: str, vol: float) -> Tuple[float, float, float]:
         response = self.place_order(market=pair,
                                     side='buy',
                                     price=None,
                                     size=vol,
                                     type='market')
-        # response = {
-        #    'id': 6315360489,
-        #    'clientId': '1043601791',
-        #    'market': 'ETH/USD',
-        #    'type': 'market',
-        #    'side': 'buy',
-        #    'price': None,
-        #    'size': 0.001,
-        #    'status': 'new',
-        #    'filledSize': 0.0,
-        #    'remainingSize': 0.001,
-        #    'reduceOnly': False,
-        #    'liquidation': False,
-        #    'avgFillPrice': None,
-        #    'postOnly': False,
-        #    'ioc': True,
-        #    'createdAt': '2022-07-14T01:56:57.092580+00:00',
-        #    'future': None
-        #}
+        #        response = {
+        #            'id': 6315360489,
+        #            'clientId': '1043601791',
+        #            'market': 'ETH/USD',
+        #            'type': 'market',
+        #            'side': 'buy',
+        #            'price': None,
+        #            'size': 0.001,
+        #            'status': 'new',
+        #            'filledSize': 0.0,
+        #            'remainingSize': 0.001,
+        #            'reduceOnly': False,
+        #            'liquidation': False,
+        #            'avgFillPrice': None,
+        #            'postOnly': False,
+        #            'ioc': True,
+        #            'createdAt': '2022-07-14T01:56:57.092580+00:00',
+        #            'future': None
+        #        }
         order_id = response.get('id')
         sleep_time = 1
         while True:
             order = self.get_order_status(order_id)
             if order.get('status') == 'closed':
                 return order.get('avgFillPrice') * order.get('filledSize') * (
-                    1 + self.get_fee_rate()), order.get(
-                        'createdAt'), order.get('avgFillPrice')
+                    1 + self.get_fee_rate()), datetime.datetime.timestamp(
+                        datetime.datetime.fromisoformat(
+                            order.get('createdAt'))), order.get('avgFillPrice')
             else:
                 time.sleep(sleep_time)
                 sleep_time *= 2

@@ -62,4 +62,4 @@ class TestApiMethods(unittest.TestCase):
         cost, created_at, avg_fill_price = self.api.add_order('ETH/USD', 0.001)
         self.assertEqual(cost, 1.1119194000000001)
         self.assertEqual(avg_fill_price, 1109.7)
-        self.assertEqual(created_at, '2022-07-14T01:56:57.092580+00:00')
+        self.assertEqual(created_at, 1657763817.09258)
