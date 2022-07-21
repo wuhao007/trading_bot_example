@@ -177,6 +177,7 @@ def Trade(pair: str, api: ftxus.api.API):
         # print('Not enough funds to ', buy[3], pair,
         #       'or trade vol too small; canceling', res)
         logger.info('Price %s too high', pair)
+        time.sleep(600)
 
     # logger.info('sleep %s minutes', cost * _SLEEP_SECONDS.get(pair) / 60)
     # time.sleep(cost * _SLEEP_SECONDS.get(pair))
