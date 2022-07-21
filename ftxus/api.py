@@ -287,8 +287,9 @@ class API(object):
             print(f'Adding {len(response)} trades with end time {end_time}')
             if len(response) == 0:
                 break
-            end_time = min(datetime.datetime.fromisoformat(t['time'])
-                           for t in response).timestamp()
+            end_time = min(
+                datetime.datetime.fromisoformat(t['time'])
+                for t in response).timestamp()
             if len(response) < limit:
                 break
         return results
@@ -482,34 +483,44 @@ class API(object):
         #                            size=vol,
         #                            type='market')
         response = {
-                'id': 6315360489, 
-                'clientId': '1043601791', 
-                'market': 'ETH/USD', 
-                'type': 'market',
-                'side': 'buy',
-                'price': None,
-                'size': 0.001, 
-                'status': 'new', 
-                'filledSize': 0.0, 
-                'remainingSize': 0.001, 
-                'reduceOnly': False, 
-                'liquidation': False, 
-                'avgFillPrice': None, 
-                'postOnly': False, 
-                'ioc': True, 
-                'createdAt': '2022-07-14T01:56:57.092580+00:00', 
-                'future': None 
-                }
+            'id': 6315360489,
+            'clientId': '1043601791',
+            'market': 'ETH/USD',
+            'type': 'market',
+            'side': 'buy',
+            'price': None,
+            'size': 0.001,
+            'status': 'new',
+            'filledSize': 0.0,
+            'remainingSize': 0.001,
+            'reduceOnly': False,
+            'liquidation': False,
+            'avgFillPrice': None,
+            'postOnly': False,
+            'ioc': True,
+            'createdAt': '2022-07-14T01:56:57.092580+00:00',
+            'future': None
+        }
         order_id = response.get('id')
         sleep_time = 1
         while True:
             order = self.get_order_status(order_id)
-            if order.get('status') == 'closed':
-                return order.get('avgFillPrice') * order.get('filledSize') * (
-                    1 + self.get_fee_rate()), datetime.datetime.timestamp(
-                        datetime.datetime.fromisoformat(
-                            order.get('createdAt'))), order.get('avgFillPrice')
+            status = order.get('status')
+            if status == 'closed':
+                filled_size = order.get('filledSize')
+                if filled_size > 0 and order.get('remainingSize') < vol:
+                    # order is filled
+                    return order.get('avgFillPrice') * filled_size * (
+                        1 + self.get_fee_rate()), datetime.datetime.timestamp(
+                            datetime.datetime.fromisoformat(
+                                order.get('createdAt'))), order.get(
+                                    'avgFillPrice')
+                else:
+                    # order is cancelled
+                    raise Exception('order cancelled')
+
             else:
+                # status is new or open
                 time.sleep(sleep_time)
                 sleep_time *= 2
 

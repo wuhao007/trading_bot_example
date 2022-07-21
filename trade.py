@@ -168,7 +168,7 @@ def Trade(pair: str, api: ftxus.api.API):
         # if (cost / order_size) > ahr999_045:
         ahr999, ahr999_120 = coin_gecko.get_coingecko()
         sleep_time = _GetWaitTime(ahr999, pair, cost)
-        logger.info('sleep extra %s minutes', sleep_time / 60)
+        logger.info('sleep %s minutes', sleep_time / 60)
         time.sleep(sleep_time)
 
     # cancel existing order if new order size is less than minimum
