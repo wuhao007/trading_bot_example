@@ -5,7 +5,6 @@ from typing import Optional, Dict, Any, List, Tuple
 
 from requests import Request, Session, Response
 import hmac
-from ciso8601 import parse_datetime
 
 
 class API(object):
@@ -288,7 +287,7 @@ class API(object):
             print(f'Adding {len(response)} trades with end time {end_time}')
             if len(response) == 0:
                 break
-            end_time = min(parse_datetime(t['time'])
+            end_time = min(datetime.datetime.fromisoformat(t['time'])
                            for t in response).timestamp()
             if len(response) < limit:
                 break
@@ -477,30 +476,30 @@ class API(object):
         return 0.002
 
     def add_order(self, pair: str, vol: float) -> Tuple[float, float, float]:
-        response = self.place_order(market=pair,
-                                    side='buy',
-                                    price=None,
-                                    size=vol,
-                                    type='market')
-        #        response = {
-        #            'id': 6315360489,
-        #            'clientId': '1043601791',
-        #            'market': 'ETH/USD',
-        #            'type': 'market',
-        #            'side': 'buy',
-        #            'price': None,
-        #            'size': 0.001,
-        #            'status': 'new',
-        #            'filledSize': 0.0,
-        #            'remainingSize': 0.001,
-        #            'reduceOnly': False,
-        #            'liquidation': False,
-        #            'avgFillPrice': None,
-        #            'postOnly': False,
-        #            'ioc': True,
-        #            'createdAt': '2022-07-14T01:56:57.092580+00:00',
-        #            'future': None
-        #        }
+        #response = self.place_order(market=pair,
+        #                            side='buy',
+        #                            price=None,
+        #                            size=vol,
+        #                            type='market')
+        response = {
+                'id': 6315360489, 
+                'clientId': '1043601791', 
+                'market': 'ETH/USD', 
+                'type': 'market',
+                'side': 'buy',
+                'price': None,
+                'size': 0.001, 
+                'status': 'new', 
+                'filledSize': 0.0, 
+                'remainingSize': 0.001, 
+                'reduceOnly': False, 
+                'liquidation': False, 
+                'avgFillPrice': None, 
+                'postOnly': False, 
+                'ioc': True, 
+                'createdAt': '2022-07-14T01:56:57.092580+00:00', 
+                'future': None 
+                }
         order_id = response.get('id')
         sleep_time = 1
         while True:

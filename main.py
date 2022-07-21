@@ -73,7 +73,6 @@ def Run(pair: str, exchange: str, key_path: str) -> None:
 def main() -> None:
     while True:
         Run(sys.argv[1], sys.argv[2], sys.argv[3])
-        break
 
 
 if __name__ == "__main__":
