@@ -18,14 +18,148 @@ class TestApiMethods(unittest.TestCase):
         self.assertEqual(10000 < bid < 100000, True)
 
     def test_add_order(self) -> None:
-        def side_effect_func(command, _):
+
+        def side_effect_func1(command, _):
             if command == 'AddOrder':
-                return {'error': [], 'result': {'txid': ['O4N3YT-TE4G2-V6SR2D']}}
+                return {
+                    'error': [],
+                    'result': {
+                        'txid': ['O4N3YT-TE4G2-V6SR2D']
+                    }
+                }
             elif command == 'QueryOrders':
-                return {'error': [], 'result': {'O4N3YT-TE4G2-V6SR2D': {'refid': None, 'userref': None, 'status': 'closed', 'opentm': 1641055525.29437, 'starttm': 0, 'expiretm': 0, 'descr': {'pair': 'USDTUSD', 'type': 'buy', 'ordertype': 'market', 'price': '0', 'price2': '0', 'leverage': 'none', 'order': 'buy 752.20000000 USDTUSD @ market', 'close': ''}, 'vol': '752.20000000', 'vol_exec': '752.20000000', 'cost': '752.35044000', 'fee': '1.50470088', 'price': '1.0002', 'stopprice': '0.00000000', 'limitprice': '0.00000000', 'misc': '', 'oflags': 'fciq', 'reason': None, 'closetm': 1641055525.2955}}}
-        self.api.query_private = MagicMock(side_effect=side_effect_func)
+                return {
+                    'error': [],
+                    'result': {
+                        'O4N3YT-TE4G2-V6SR2D': {
+                            'refid': None,
+                            'userref': None,
+                            'status': 'closed',
+                            'opentm': 1641055525.29437,
+                            'starttm': 0,
+                            'expiretm': 0,
+                            'descr': {
+                                'pair': 'USDTUSD',
+                                'type': 'buy',
+                                'ordertype': 'market',
+                                'price': '0',
+                                'price2': '0',
+                                'leverage': 'none',
+                                'order': 'buy 752.20000000 USDTUSD @ market',
+                                'close': ''
+                            },
+                            'vol': '752.20000000',
+                            'vol_exec': '752.20000000',
+                            'cost': '752.35044000',
+                            'fee': '1.50470088',
+                            'price': '1.0002',
+                            'stopprice': '0.00000000',
+                            'limitprice': '0.00000000',
+                            'misc': '',
+                            'oflags': 'fciq',
+                            'reason': None,
+                            'closetm': 1641055525.2955
+                        }
+                    }
+                }
+
+        self.api.query_private = MagicMock(side_effect=side_effect_func1)
         cost, price = self.api.add_order('pair', -1)
         self.assertEqual(cost, 753.85514088)
         self.assertEqual(price, 1.0002)
-        # self.api.query_private = MagicMock(side_effect=side_effect_func)
 
+        def side_effect_func2(command, _):
+            if command == 'AddOrder':
+                return {
+                    'error': [],
+                    'result': {
+                        'txid': ['O4N3YT-TE4G2-V6SR2D']
+                    }
+                }
+            elif command == 'QueryOrders':
+                return {
+                    'error': [],
+                    'result': {
+                        'O4N3YT-TE4G2-V6SR2D': {
+                            'refid': None,
+                            'userref': None,
+                            'status': 'canceled',
+                            'opentm': 1641055525.29437,
+                            'starttm': 0,
+                            'expiretm': 0,
+                            'descr': {
+                                'pair': 'USDTUSD',
+                                'type': 'buy',
+                                'ordertype': 'market',
+                                'price': '0',
+                                'price2': '0',
+                                'leverage': 'none',
+                                'order': 'buy 752.20000000 USDTUSD @ market',
+                                'close': ''
+                            },
+                            'vol': '752.20000000',
+                            'vol_exec': '752.20000000',
+                            'cost': '752.35044000',
+                            'fee': '1.50470088',
+                            'price': '1.0002',
+                            'stopprice': '0.00000000',
+                            'limitprice': '0.00000000',
+                            'misc': '',
+                            'oflags': 'fciq',
+                            'reason': None,
+                            'closetm': 1641055525.2955
+                        }
+                    }
+                }
+
+        self.api.query_private = MagicMock(side_effect=side_effect_func2)
+        with self.assertRaises(Exception):
+            cost, price = self.api.add_order('pair', -1)
+
+        def side_effect_func3(command, _):
+            if command == 'AddOrder':
+                return {
+                    'error': [],
+                    'result': {
+                        'txid': ['O4N3YT-TE4G2-V6SR2D']
+                    }
+                }
+            elif command == 'QueryOrders':
+                return {
+                    'error': [],
+                    'result': {
+                        'O4N3YT-TE4G2-V6SR2D': {
+                            'refid': None,
+                            'userref': None,
+                            'status': 'expired',
+                            'opentm': 1641055525.29437,
+                            'starttm': 0,
+                            'expiretm': 0,
+                            'descr': {
+                                'pair': 'USDTUSD',
+                                'type': 'buy',
+                                'ordertype': 'market',
+                                'price': '0',
+                                'price2': '0',
+                                'leverage': 'none',
+                                'order': 'buy 752.20000000 USDTUSD @ market',
+                                'close': ''
+                            },
+                            'vol': '752.20000000',
+                            'vol_exec': '752.20000000',
+                            'cost': '752.35044000',
+                            'fee': '1.50470088',
+                            'price': '1.0002',
+                            'stopprice': '0.00000000',
+                            'limitprice': '0.00000000',
+                            'misc': '',
+                            'oflags': 'fciq',
+                            'reason': None,
+                            'closetm': 1641055525.2955
+                        }
+                    }
+                }
+
+        self.api.query_private = MagicMock(side_effect=side_effect_func3)
+        with self.assertRaises(Exception):
+            cost, price = self.api.add_order('pair', -1)

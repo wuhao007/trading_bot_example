@@ -65,10 +65,8 @@ class API(object):
         self.session = requests.Session()
         __version__ = '2.1.0'
         __url__ = 'https://github.com/veox/python3-krakenex'
-        self.session.headers.update({
-            'User-Agent':
-            'krakenex/' + __version__ + ' (+' + __url__ + ')'
-        })
+        self.session.headers.update(
+            {'User-Agent': 'krakenex/' + __version__ + ' (+' + __url__ + ')'})
         self.response = None
         self._json_options = {}
         return
@@ -257,6 +255,7 @@ class API(object):
                 sleep_time *= 2
             elif status in ('canceled', 'expired'):
                 raise Exception(order)
+
 
 #    def get_total_account_usd_balance(self):
 #        balance = self.query_private('Balance')
