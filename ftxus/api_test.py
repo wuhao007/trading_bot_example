@@ -13,7 +13,6 @@ class TestApiMethods(unittest.TestCase):
             "bids": [[20512.0, 5.3274]],
             "asks": [[20514.0, 0.365]]
         })
-        # print(self.api._get())
         ask, bid = self.api.get_ask_bid('BTC/USD')
         self.assertEqual(ask, 20514.0)
         self.assertEqual(bid, 20512.0)

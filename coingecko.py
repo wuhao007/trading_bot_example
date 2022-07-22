@@ -373,4 +373,4 @@ class CoinGecko(object):
         # ydata = np.log10(prices[:, 1])
         self.prices = np.append(self.prices, [[time.time() * 1000, price]],
                                 axis=0)
-        print(self.prices[-2:])
+        # print(self.prices[-2:])

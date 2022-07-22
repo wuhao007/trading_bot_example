@@ -27,7 +27,7 @@ import hashlib
 import hmac
 import base64
 
-from . import version
+#from . import version
 
 
 class API(object):
@@ -63,9 +63,11 @@ class API(object):
         self.uri = 'https://api.kraken.com'
         self.apiversion = '0'
         self.session = requests.Session()
+        __version__ = '2.1.0'
+        __url__ = 'https://github.com/veox/python3-krakenex'
         self.session.headers.update({
             'User-Agent':
-            'krakenex/' + version.__version__ + ' (+' + version.__url__ + ')'
+            'krakenex/' + __version__ + ' (+' + __url__ + ')'
         })
         self.response = None
         self._json_options = {}
@@ -238,7 +240,6 @@ class API(object):
                 'volume': str(
                     '%.8f' % vol),  #'price': str(price_cell % price),
             })
-        response = {'error': [], 'result': {'txid': ['O4N3YT-TE4G2-V6SR2D']}}
         if response.get('error'):
             raise Exception(response.get('error'))
 
@@ -257,15 +258,15 @@ class API(object):
             elif status in ('canceled', 'expired'):
                 raise Exception(order)
 
-    def get_total_account_usd_balance(self):
-        balance = self.query_private('Balance')
-        if balance.get('error'):
-            return float(
-                self.query_private('Balance').get('result').get('ZUSD'))
-        else:
-            return float(balance.get('result').get('ZUSD'))
-
-
+#    def get_total_account_usd_balance(self):
+#        balance = self.query_private('Balance')
+#        if balance.get('error'):
+#            return float(
+#                self.query_private('Balance').get('result').get('ZUSD'))
+#        else:
+#            return float(balance.get('result').get('ZUSD'))
+#
+#
 #
 #        # response = {'error': [], 'result': {'txid': ['O4N3YT-TE4G2-V6SR2D']}}
 #        txid = ','.join(response.get('result').get('txid'))
