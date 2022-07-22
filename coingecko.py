@@ -368,9 +368,8 @@ class CoinGecko(object):
     def get_coingecko(self) -> Tuple[float, float]:
         return _GetHaowu999(self.prices, self.start_date)
 
-    def add_own_data(self, price: float) -> None:
+    def add_own_data(self, opentm: float, price: float) -> None:
         # sdata = np.log10(_GetCoinDays(prices[:, 0], start_date)).reshape(-1, 1)
         # ydata = np.log10(prices[:, 1])
-        self.prices = np.append(self.prices, [[time.time() * 1000, price]],
-                                axis=0)
+        self.prices = np.append(self.prices, [[opentm * 1000, price]], axis=0)
         # print(self.prices[-2:])

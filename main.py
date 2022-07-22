@@ -41,7 +41,7 @@ def Run(pair: str, exchange: str, key_path: str) -> None:
     # asset_pairs = api.query_public('AssetPairs', {'pair': 'XXBTZUSD'})
     # print('asset_pairs', json.dumps(asset_pairs, indent=4))
     # closed_orders = api.query_private('ClosedOrders').get('result').get('closed')
-    # print('closed_orders: ', closed_orders)
+    # print('closed_orders: ', json.dumps(closed_orders, indent=4, sort_keys=True))
 
     # sanity check: checking OpenOrders result and retry if needed
     # if orders.get('error'):

@@ -64,9 +64,10 @@ class TestApiMethods(unittest.TestCase):
                 }
 
         self.api.query_private = MagicMock(side_effect=side_effect_func1)
-        cost, price = self.api.add_order('pair', -1)
+        cost, opentm, price = self.api.add_order('pair', -1)
         self.assertEqual(cost, 753.85514088)
         self.assertEqual(price, 1.0002)
+        self.assertEqual(opentm, 1641055525.29437)
 
         def side_effect_func2(command, _):
             if command == 'AddOrder':
@@ -114,7 +115,7 @@ class TestApiMethods(unittest.TestCase):
 
         self.api.query_private = MagicMock(side_effect=side_effect_func2)
         with self.assertRaises(Exception):
-            cost, price = self.api.add_order('pair', -1)
+            self.api.add_order('pair', -1)
 
         def side_effect_func3(command, _):
             if command == 'AddOrder':
@@ -162,4 +163,4 @@ class TestApiMethods(unittest.TestCase):
 
         self.api.query_private = MagicMock(side_effect=side_effect_func3)
         with self.assertRaises(Exception):
-            cost, price = self.api.add_order('pair', -1)
+            self.api.add_order('pair', -1)

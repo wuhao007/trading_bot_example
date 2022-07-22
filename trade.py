@@ -111,9 +111,9 @@ def Trade(pair: str, api: ftxus.api.API):
         # bal_start = 1998.40127897
         # logger.info('before order balance: %s', bal_start)
 
-        cost, avg_fill_price = api.add_order(pair, order_size)
+        cost, opentm, avg_fill_price = api.add_order(pair, order_size)
         # avg_fill_price = api.add_order(pair, order_size)
-        coin_gecko.add_own_data(avg_fill_price)
+        coin_gecko.add_own_data(opentm, avg_fill_price)
         # response = 'test'
 
         logger.info('cost: %s', cost)

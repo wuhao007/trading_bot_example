@@ -511,7 +511,10 @@ class API(object):
                 if filled_size > 0 and order.get('remainingSize') < vol:
                     # order is filled
                     return order.get('avgFillPrice') * filled_size * (
-                        1 + self.get_fee_rate()), order.get('avgFillPrice')
+                        1 + self.get_fee_rate()), datetime.datetime.timestamp(
+                            datetime.datetime.fromisoformat(
+                                order.get('createdAt'))), order.get(
+                                    'avgFillPrice')
                 else:
                     # order is cancelled
                     raise Exception('order cancelled')
