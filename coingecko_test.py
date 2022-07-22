@@ -7,6 +7,7 @@ class TestCoinGeckoMethods(unittest.TestCase):
     def setUp(self) -> None:
         super().setUp()
         self.coin_gecko = coingecko.CoinGecko('ETH/USD')
+        self.coin_gecko.update()
 
     def test_get_coingecko(self) -> None:
 
@@ -22,10 +23,10 @@ class TestCoinGeckoMethods(unittest.TestCase):
         # print('last price', self.coin_gecko.prices[-1])
         num_days = self.coin_gecko.prices.shape[0]
         # date_time = '2022-07-14T01:56:57.092580+00:00'
-        self.coin_gecko.add_own_data(1657763817.09258, 1109.7)
+        self.coin_gecko.add_own_data(1109.7)
         last_price = self.coin_gecko.prices[-1]
         # print(coingecko._Date2Timestamp(date_time))
-        self.assertEqual(last_price[0], 1657763817.09258 * 1000)
+        # self.assertEqual(last_price[0], 1657763817.09258 * 1000)
         self.assertEqual(last_price[1], 1109.7)
         self.assertEqual(num_days + 1, self.coin_gecko.prices.shape[0])
 

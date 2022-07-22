@@ -12,7 +12,7 @@ import sys
 def Run(pair: str, exchange: str, key_path: str) -> None:
     # starting logger
     # pair = config.PAIRS[coin]
-    logger = util.setup_logger('run', 'run')
+    # logger = util.setup_logger('run', 'run')
     # loading Kraken library and key
     # loading path to API keys
     key, secret = util.load_key(key_path)
@@ -67,14 +67,9 @@ def Run(pair: str, exchange: str, key_path: str) -> None:
     trade.Trade(pair, api)
 
     # stop the logger
-    logger.handlers.pop()
-
-
-def main() -> None:
-    while True:
-        Run(sys.argv[1], sys.argv[2], sys.argv[3])
+    # logger.handlers.pop()
 
 
 if __name__ == "__main__":
     # getting bot trading pairs from config file
-    main()
+    Run(sys.argv[1], sys.argv[2], sys.argv[3])

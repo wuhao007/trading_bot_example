@@ -238,6 +238,7 @@ class API(object):
                 'volume': str(
                     '%.8f' % vol),  #'price': str(price_cell % price),
             })
+        response = {'error': [], 'result': {'txid': ['O4N3YT-TE4G2-V6SR2D']}}
         if response.get('error'):
             raise Exception(response.get('error'))
 
@@ -248,7 +249,8 @@ class API(object):
             }).get('result').get(txid)
             status = order.get('status')
             if status == 'closed':
-                return float(order.get('cost')) + float(order.get('fee'))
+                return float(order.get('cost')) + float(
+                    order.get('fee')), float(order.get('price'))
             elif status in ('pending', 'open'):
                 time.sleep(sleep_time)
                 sleep_time *= 2

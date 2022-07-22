@@ -360,15 +360,17 @@ class CoinGecko(object):
 
     def __init__(self, coin: str) -> None:
         self.coin = _API2COINGECKO[coin]
-        self.prices = np.array(_GetMarketChart(self.coin, 'usd'))
         self.start_date = _START_DATE[self.coin]
+
+    def update(self):
+        self.prices = np.array(_GetMarketChart(self.coin, 'usd'))
 
     def get_coingecko(self) -> Tuple[float, float]:
         return _GetHaowu999(self.prices, self.start_date)
 
-    def add_own_data(self, date_time: float, price: float) -> None:
+    def add_own_data(self, price: float) -> None:
         # sdata = np.log10(_GetCoinDays(prices[:, 0], start_date)).reshape(-1, 1)
         # ydata = np.log10(prices[:, 1])
-        self.prices = np.append(self.prices, [[date_time * 1000, price]],
+        self.prices = np.append(self.prices, [[time.time() * 1000, price]],
                                 axis=0)
-        # print(self.prices[-1])
+        print(self.prices[-2:])
